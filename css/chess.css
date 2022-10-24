@@ -1,0 +1,1 @@
+*{overflow:hidden}body{background:#5f3d2d}.chesspieces,canvas{position:absolute;top:0;left:0}#chessboard{z-index:-1}.chessboard{position:relative;width:480px;height:480px;left:50%;-ms-transform:translateX(-50%);transform:translateX(-50%);text-align:center}.piece{z-index:1;position:absolute;left:0}
