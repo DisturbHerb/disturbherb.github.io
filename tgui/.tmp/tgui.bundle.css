@@ -4680,10 +4680,65 @@ td, th {
   border-bottom: 2px solid #3e6189;
 }
 
+/**
+ * Copyright (c) 2020 Aleksej Komarov
+ * SPDX-License-Identifier: MIT
+ */
 .boardgame__window {
   height: 100%;
   display: flex;
   flex-direction: column;
+}
+
+.boardgame__debug {
+  display: none;
+  position: fixed;
+  margin: 2px;
+  padding: 2px;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.boardgame__configmodal {
+  background-color: rgba(0, 0, 0, 0.7);
+  width: 100%;
+  height: 100%;
+}
+
+.boardgame__configmodal > .Dimmer__inner {
+  width: 75%;
+  height: 75%;
+}
+
+.boardgame__settings {
+  padding: 20px;
+  background-color: #252525;
+}
+
+.boardgame__settings-input {
+  font-size: 12px;
+  min-width: 150px;
+  height: 60px;
+}
+
+.boardgame_floatingpiece {
+  pointer-events: none;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  color: black;
+  text-shadow: 0px 0px 1px white;
+  font-weight: bold;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  width: 200px;
+  margin-left: -100px;
+  height: 50px;
+  margin-top: -25px;
+}
+
+.boardgame_floatingpiece > div {
+  text-align: center;
 }
 
 .boardgame__panel {
@@ -4692,6 +4747,63 @@ td, th {
 
 .boardgame__board {
   flex-grow: 1;
+}
+
+.boardgame__piece-set-wrapper {
+  height: 120px;
+  padding: 4px;
+  background-color: #b1b1b1;
+}
+
+.boardgame__piece-set-container {
+  text-align: center;
+  overflow-x: scroll;
+  overflow-y: hidden;
+}
+
+.boardgame__piece-set-button {
+  background-color: red;
+}
+
+.boardgame__piece-set-button > div {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  font-weight: bold;
+}
+
+.boardgame__piece-set {
+  justify-content: center;
+  align-items: center;
+}
+
+.boardgame__piece-set-vertical {
+  display: flex;
+  flex-direction: column;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  width: 20px;
+}
+
+.boardgame__piece-set-horizontal {
+  display: flex;
+  justify-content: space-around;
+  flex-direction: row;
+  margin-left: 30px;
+  margin-right: 30px;
+  padding-left: 24px;
+  padding-right: 24px;
+}
+
+.boardgame__piece-set-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  padding: 4px;
+  font-weight: bold;
 }
 
 .boardgame__verticalnotations {
@@ -4714,8 +4826,6 @@ td, th {
   display: flex;
   justify-content: space-around;
   flex-direction: row;
-  margin-left: 30px;
-  margin-right: 30px;
   padding-left: 24px;
   padding-right: 24px;
 }
@@ -4783,7 +4893,6 @@ td, th {
 
 .boardgame__palettepiece > img:hover {
   cursor: pointer;
-  border: 1px solid #afafaf;
 }
 
 .boardgame__checker {
@@ -4792,12 +4901,23 @@ td, th {
   flex-wrap: wrap;
 }
 
-.boardgame__checkertile img {
-  display: none;
+.boardgame__checkertile {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
 }
 
-.boardgame__checkertile:hover {
-  box-shadow: inset 0px 0px 0px 1px white;
+.boardgame__piece {
+  transition: 1s all;
+  padding: 5%;
+}
+
+.boardgame__piece > img {
+  cursor: pointer;
+  width: 100%;
+  height: auto;
+  max-height: 100%;
 }
 
 .boardgame__tilenotation {
@@ -5599,6 +5719,64 @@ td, th {
 .cyborg-module-rewriter-interface-module-view__tool-label {
   margin-left: 0.5em;
   color: #8b9bb0;
+}
+
+/**
+ * Copyright (c) 2020 Aleksej Komarov
+ * SPDX-License-Identifier: MIT
+ */
+.gameclock__side {
+  padding: 8px;
+}
+
+.gameclock__sideicon {
+  text-align: center;
+  font-size: 24px;
+  padding-bottom: 8px;
+}
+
+.gameclock__timebutton {
+  width: 100%;
+  height: 100px;
+  margin: 2px;
+  text-align: center;
+  font-size: 2em;
+}
+
+.gameclock__timeflex {
+  flex-direction: column;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.gameclock__timebutton > i {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.gameclock__swap {
+  padding-top: 16px;
+}
+
+.gameclock__utilbutton {
+  width: 28px;
+  height: 28px;
+  margin: 6px;
+}
+
+.gameclock__utilbutton > i {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.gameclock__mid {
+  padding-top: 36px;
 }
 
 .gas-canister-detonator-utility__list-item {
