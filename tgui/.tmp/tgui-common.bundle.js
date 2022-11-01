@@ -36904,7 +36904,7 @@ var Icon = function Icon(props) {
   var faName = name.replace(FA_OUTLINE_REGEX, '');
   return (0, _inferno.normalizeProps)((0, _inferno.createComponentVNode)(2, _Box.Box, Object.assign({
     "as": "i",
-    "className": (0, _react.classes)(['Icon', className, faRegular ? 'far' : 'fas', 'fa-' + faName, spin && 'fa-spin']),
+    "className": (0, _react.classes)(['Icon', className, faRegular ? 'fa-regular' : 'fa-solid', 'fa-' + faName, spin && 'fa-spin']),
     "style": style
   }, rest)));
 };

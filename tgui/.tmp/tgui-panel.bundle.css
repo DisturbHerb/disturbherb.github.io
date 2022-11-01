@@ -463,14 +463,14 @@ td, th {
   margin-bottom: 0;
 }
 
-.Button .fa, .Button .fas, .Button .far {
+.Button .fa, .Button .fa-solid, .Button .fa-regular {
   margin-left: -0.25em;
   margin-right: -0.25em;
   min-width: 1.333em;
   text-align: center;
 }
 
-.Button--hasContent .fa, .Button--hasContent .fas, .Button--hasContent .far {
+.Button--hasContent .fa, .Button--hasContent .fa-solid, .Button--hasContent .fa-regular {
   margin-right: 0.25em;
 }
 
@@ -4494,13 +4494,13 @@ em {
   margin-right: 0;
   margin-bottom: 0;
 }
-.theme-light .Button .fa, .theme-light .Button .fas, .theme-light .Button .far {
+.theme-light .Button .fa, .theme-light .Button .fa-solid, .theme-light .Button .fa-regular {
   margin-left: -0.25em;
   margin-right: -0.25em;
   min-width: 1.333em;
   text-align: center;
 }
-.theme-light .Button--hasContent .fa, .theme-light .Button--hasContent .fas, .theme-light .Button--hasContent .far {
+.theme-light .Button--hasContent .fa, .theme-light .Button--hasContent .fa-solid, .theme-light .Button--hasContent .fa-regular {
   margin-right: 0.25em;
 }
 .theme-light .Button--ellipsis {

@@ -31,7 +31,13 @@ var Gameclock = function Gameclock(_props, context) {
 
   var _useLocalState = (0, _backend.useLocalState)(context, 'configModalOpen', false),
       configModalOpen = _useLocalState[0],
-      setConfigModalOpen = _useLocalState[1];
+      setConfigModalOpen = _useLocalState[1]; // line 13 is supposed to be for toggling showing separate time values for white or black, or a single input for both
+  // fudge this later
+
+
+  var _useLocalState2 = (0, _backend.useLocalState)(context, 'showSeparateTimes', false),
+      showSeparateTimes = _useLocalState2[0],
+      toggleShowSeparateTimes = _useLocalState2[1];
 
   var showTime = function showTime(value) {
     return (0, _format.formatTime)(value * 10);
@@ -43,7 +49,8 @@ var Gameclock = function Gameclock(_props, context) {
     "height": 200,
     children: (0, _inferno.createComponentVNode)(2, _layouts.Window.Content, {
       "scrollable": true,
-      children: [configModalOpen && (0, _inferno.createComponentVNode)(2, _components.Modal, {
+      children: [configModalOpen && (0, _inferno.createComponentVNode)(2, _components.Dimmer, {
+        "className": "gameclock__configmodal",
         children: [(0, _inferno.createComponentVNode)(2, _components.Button.Checkbox, {
           "content": "Use separate times"
         }), (0, _inferno.createComponentVNode)(2, _components.LabeledList, {
@@ -74,7 +81,7 @@ var Gameclock = function Gameclock(_props, context) {
 
             return onClick;
           }(),
-          children: "Close"
+          "content": "Close"
         })]
       }), (0, _inferno.createComponentVNode)(2, _components.Flex, {
         children: [(0, _inferno.createComponentVNode)(2, _components.Flex.Item, {
@@ -143,9 +150,9 @@ var SidePart = function SidePart(props) {
 /******/ 
 /******/ /* webpack/runtime/getFullHash */
 /******/ !function() {
-/******/ 	__webpack_require__.h = function() { return "33bb03ce488b4062613a"; }
+/******/ 	__webpack_require__.h = function() { return "d26711566e8d00e09826"; }
 /******/ }();
 /******/ 
 /******/ }
 );
-//# sourceMappingURL=tgui.2672350d595ee7058892.hot-update.js.map
+//# sourceMappingURL=tgui.e720225895a0452d3e99.hot-update.js.map
