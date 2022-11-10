@@ -34588,10 +34588,10 @@ exports.useSharedState = useSharedState;
 
 /***/ }),
 
-/***/ "./packages/tgui/components/AnimatedNumber.js":
-/*!****************************************************!*\
-  !*** ./packages/tgui/components/AnimatedNumber.js ***!
-  \****************************************************/
+/***/ "./packages/tgui/components/AnimatedNumber.tsx":
+/*!*****************************************************!*\
+  !*** ./packages/tgui/components/AnimatedNumber.tsx ***!
+  \*****************************************************/
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -34600,73 +34600,79 @@ exports.useSharedState = useSharedState;
 exports.__esModule = true;
 exports.AnimatedNumber = void 0;
 
-var _math = __webpack_require__(/*! common/math */ "./packages/common/math.ts");
-
 var _inferno = __webpack_require__(/*! inferno */ "./.yarn/cache/inferno-npm-7.4.8-f828cb79a7-dd2af1493c.zip/node_modules/inferno/index.esm.js");
+
+var _math = __webpack_require__(/*! common/math */ "./packages/common/math.ts");
 
 function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; _setPrototypeOf(subClass, superClass); }
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function () { function _setPrototypeOf(o, p) { o.__proto__ = p; return o; } return _setPrototypeOf; }(); return _setPrototypeOf(o, p); }
 
-var FPS = 20;
-var Q = 0.5;
-
 var isSafeNumber = function isSafeNumber(value) {
+  // prettier-ignore
   return typeof value === 'number' && Number.isFinite(value) && !Number.isNaN(value);
 };
+
+/**
+  * Animated numbers are animated at roughly 60 frames per second.
+  */
+var SIXTY_HZ = 1000.0 / 60.0;
+/**
+  * The exponential moving average coefficient. Larger values result in a faster
+  * convergence.
+  */
+
+var Q = 0.8333;
+/**
+  * A small number.
+  */
+
+var EPSILON = 10e-4;
+/**
+  * An animated number label. Shows a number, formatted with an optionally
+  * provided function, and animates it towards its target value.
+  */
 
 var AnimatedNumber = /*#__PURE__*/function (_Component) {
   _inheritsLoose(AnimatedNumber, _Component);
 
+  /**
+   * The inner `<span/>` being updated sixty times per second.
+   */
+
+  /**
+   * The interval being used to update the inner span.
+   */
+
+  /**
+   * The current value. This values approaches the target value.
+   */
   function AnimatedNumber(props) {
     var _this;
 
     _this = _Component.call(this, props) || this;
-    _this.timer = null;
-    _this.state = {
-      value: 0
-    }; // Use provided initial state
+    _this.ref = (0, _inferno.createRef)();
+    _this.interval = void 0;
+    _this.currentValue = 0;
+    var initial = props.initial,
+        value = props.value;
 
-    if (isSafeNumber(props.initial)) {
-      _this.state.value = props.initial;
-    } // Set initial state with value provided in props
-    else if (isSafeNumber(props.value)) {
-        _this.state.value = Number(props.value);
-      }
+    if (initial !== undefined && isSafeNumber(initial)) {
+      _this.currentValue = initial;
+    } else if (isSafeNumber(value)) {
+      _this.currentValue = value;
+    }
 
     return _this;
   }
 
   var _proto = AnimatedNumber.prototype;
 
-  _proto.tick = function () {
-    function tick() {
-      var props = this.props,
-          state = this.state;
-      var currentValue = Number(state.value);
-      var targetValue = Number(props.value); // Avoid poisoning our state with infinities and NaN
-
-      if (!isSafeNumber(targetValue)) {
-        return;
-      } // Smooth the value using an exponential moving average
-
-
-      var value = currentValue * Q + targetValue * (1 - Q);
-      this.setState({
-        value: value
-      });
-    }
-
-    return tick;
-  }();
-
   _proto.componentDidMount = function () {
     function componentDidMount() {
-      var _this2 = this;
-
-      this.timer = setInterval(function () {
-        return _this2.tick();
-      }, 1000 / FPS);
+      if (this.currentValue !== this.props.value) {
+        this.startTicking();
+      }
     }
 
     return componentDidMount;
@@ -34674,42 +34680,132 @@ var AnimatedNumber = /*#__PURE__*/function (_Component) {
 
   _proto.componentWillUnmount = function () {
     function componentWillUnmount() {
-      clearTimeout(this.timer);
+      // Stop animating when the component is unmounted.
+      this.stopTicking();
     }
 
     return componentWillUnmount;
   }();
 
-  _proto.render = function () {
-    function render() {
-      var props = this.props,
-          state = this.state;
-      var format = props.format,
-          children = props.children;
-      var currentValue = state.value;
-      var targetValue = props.value; // Directly display values which can't be animated
+  _proto.shouldComponentUpdate = function () {
+    function shouldComponentUpdate(newProps) {
+      if (newProps.value !== this.props.value) {
+        // The target value has been adjusted; start animating if we aren't
+        // already.
+        this.startTicking();
+      } // We render the inner `span` directly using a ref to bypass inferno diffing
+      // and reach 60 frames per second--tell inferno not to re-render this tree.
 
-      if (!isSafeNumber(targetValue)) {
-        return targetValue || null;
+
+      return false;
+    }
+
+    return shouldComponentUpdate;
+  }()
+  /**
+   * Starts animating the inner span. If the inner span is already animating,
+   * this is a no-op.
+   */
+  ;
+
+  _proto.startTicking = function () {
+    function startTicking() {
+      var _this2 = this;
+
+      if (this.interval !== undefined) {
+        // We're already ticking; do nothing.
+        return;
       }
 
-      var formattedValue; // Use custom formatter
+      this.interval = setInterval(function () {
+        return _this2.tick();
+      }, SIXTY_HZ);
+    }
+
+    return startTicking;
+  }()
+  /**
+   * Stops animating the inner span.
+   */
+  ;
+
+  _proto.stopTicking = function () {
+    function stopTicking() {
+      if (this.interval === undefined) {
+        // We're not ticking; do nothing.
+        return;
+      }
+
+      clearInterval(this.interval);
+      this.interval = undefined;
+    }
+
+    return stopTicking;
+  }()
+  /**
+   * Steps forward one frame.
+   */
+  ;
+
+  _proto.tick = function () {
+    function tick() {
+      var currentValue = this.currentValue;
+      var value = this.props.value;
+
+      if (isSafeNumber(value)) {
+        // Converge towards the value.
+        this.currentValue = currentValue * Q + value * (1 - Q);
+      } else {
+        // If the value is unsafe, we're never going to converge, so stop ticking.
+        this.stopTicking();
+      }
+
+      if (Math.abs(value - this.currentValue) < Math.max(EPSILON, EPSILON * value)) {
+        // We're about as close as we're going to get--snap to the value and
+        // stop ticking.
+        this.currentValue = value;
+        this.stopTicking();
+      }
+
+      if (this.ref.current) {
+        // Directly update the inner span, without bothering inferno.
+        this.ref.current.textContent = this.getText();
+      }
+    }
+
+    return tick;
+  }()
+  /**
+   * Gets the inner text of the span.
+   */
+  ;
+
+  _proto.getText = function () {
+    function getText() {
+      var props = this.props,
+          currentValue = this.currentValue;
+      var format = props.format,
+          value = props.value;
+
+      if (!isSafeNumber(value)) {
+        return String(value);
+      }
 
       if (format) {
-        formattedValue = format(currentValue);
-      } // Fix our animated precision at target value's precision.
-      else {
-          var fraction = String(targetValue).split('.')[1];
-          var precision = fraction ? fraction.length : 0;
-          formattedValue = (0, _math.toFixed)(currentValue, (0, _math.clamp)(precision, 0, 8));
-        } // Use a custom render function
-
-
-      if (typeof children === 'function') {
-        return children(formattedValue, currentValue);
+        return format(this.currentValue);
       }
 
-      return formattedValue;
+      var fraction = String(value).split('.')[1];
+      var precision = fraction ? fraction.length : 0;
+      return (0, _math.toFixed)(currentValue, (0, _math.clamp)(precision, 0, 8));
+    }
+
+    return getText;
+  }();
+
+  _proto.render = function () {
+    function render() {
+      return (0, _inferno.createVNode)(1, "span", null, this.getText(), 0, null, null, this.ref);
     }
 
     return render;
@@ -36197,7 +36293,7 @@ var _math = __webpack_require__(/*! common/math */ "./packages/common/math.ts");
 
 var _react = __webpack_require__(/*! common/react */ "./packages/common/react.ts");
 
-var _AnimatedNumber = __webpack_require__(/*! ./AnimatedNumber */ "./packages/tgui/components/AnimatedNumber.js");
+var _AnimatedNumber = __webpack_require__(/*! ./AnimatedNumber */ "./packages/tgui/components/AnimatedNumber.tsx");
 
 function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; _setPrototypeOf(subClass, superClass); }
 
@@ -37538,7 +37634,7 @@ var _math = __webpack_require__(/*! common/math */ "./packages/common/math.ts");
 
 var _react = __webpack_require__(/*! common/react */ "./packages/common/react.ts");
 
-var _AnimatedNumber = __webpack_require__(/*! ./AnimatedNumber */ "./packages/tgui/components/AnimatedNumber.js");
+var _AnimatedNumber = __webpack_require__(/*! ./AnimatedNumber */ "./packages/tgui/components/AnimatedNumber.tsx");
 
 var _Box = __webpack_require__(/*! ./Box */ "./packages/tgui/components/Box.tsx");
 
@@ -38078,7 +38174,7 @@ var _math = __webpack_require__(/*! common/math */ "./packages/common/math.ts");
 
 var _react = __webpack_require__(/*! common/react */ "./packages/common/react.ts");
 
-var _AnimatedNumber = __webpack_require__(/*! ./AnimatedNumber */ "./packages/tgui/components/AnimatedNumber.js");
+var _AnimatedNumber = __webpack_require__(/*! ./AnimatedNumber */ "./packages/tgui/components/AnimatedNumber.tsx");
 
 var _Box = __webpack_require__(/*! ./Box */ "./packages/tgui/components/Box.tsx");
 
@@ -39248,7 +39344,7 @@ exports.SectionEx = SectionEx;
 exports.__esModule = true;
 exports.Tooltip = exports.TimeDisplay = exports.TextArea = exports.Tabs = exports.Table = exports.Stack = exports.Slider = exports.SectionEx = exports.Section = exports.RoundGauge = exports.Popper = exports.ProgressBar = exports.Placeholder = exports.NumberInput = exports.NoticeBox = exports.Modal = exports.LabeledList = exports.LabeledControls = exports.Knob = exports.Input = exports.Image = exports.Icon = exports.Grid = exports.Flex = exports.Dropdown = exports.DraggableControl = exports.Divider = exports.Dimmer = exports.ColorButton = exports.ColorBox = exports.Collapsible = exports.Chart = exports.ByondUi = exports.Button = exports.Box = exports.BlockQuote = exports.Blink = exports.Autofocus = exports.AnimatedNumber = void 0;
 
-var _AnimatedNumber = __webpack_require__(/*! ./AnimatedNumber */ "./packages/tgui/components/AnimatedNumber.js");
+var _AnimatedNumber = __webpack_require__(/*! ./AnimatedNumber */ "./packages/tgui/components/AnimatedNumber.tsx");
 
 exports.AnimatedNumber = _AnimatedNumber.AnimatedNumber;
 

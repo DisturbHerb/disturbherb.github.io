@@ -4684,47 +4684,14 @@ td, th {
  * Copyright (c) 2020 Aleksej Komarov
  * SPDX-License-Identifier: MIT
  */
-.gameclock__side {
-  padding: 8px;
-}
-
-.gameclock__clock {
-  text-align: center;
-  font-size: 40px;
-  font-weight: bold;
-  color: black;
-  background-color: white;
-  border: 2px solid black;
-  border-radius: 4px;
-  width: 100%;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  margin: 2px;
-}
-
-.gameclock__iconwrapper {
-  padding: 4px;
-  text-align: center;
-  font-size: 16px;
-}
-
-.gameclock__button {
-  width: 100%;
-  height: 50px;
-  margin: 2px;
-}
-
-.gameclock__button > i {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-}
-
 .boardgame__window {
   height: 100%;
   display: flex;
   flex-direction: column;
+}
+
+.boardgame__wrapper {
+  flex: 1;
 }
 
 .boardgame__window * {
@@ -4745,10 +4712,16 @@ td, th {
 
 .boardgame__debug {
   position: fixed;
-  margin: 2px;
+  top: 4px;
+  right: 50px;
   padding: 2px;
-  background-color: rgba(0, 0, 0, 0.5);
   z-index: 20;
+}
+
+.boardgame__heldpiece {
+  position: fixed;
+  z-index: 10;
+  pointer-events: none;
 }
 
 .boardgame__configmodal {
@@ -4757,14 +4730,25 @@ td, th {
   height: 100%;
 }
 
+.boardgame__configmodal > .Dimmer {
+  background-color: green;
+}
+
 .boardgame__configmodal > .Dimmer__inner {
-  width: 75%;
-  height: 75%;
+  width: 90%;
+  height: 90%;
 }
 
 .boardgame__settings {
-  padding: 20px;
+  display: flex;
+  flex-direction: column;
   background-color: #252525;
+}
+
+.boardgame__settingspart {
+  overflow-y: scroll;
+  flex-grow: 1;
+  padding: 10px;
 }
 
 .boardgame__settings-input {
@@ -4773,6 +4757,63 @@ td, th {
   height: 60px;
 }
 
+.boardgame__ghostpiece {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  z-index: 20;
+  -webkit-touch-callout: none;
+  /* iOS Safari */
+  -webkit-user-select: none;
+  /* Safari */
+  -khtml-user-select: none;
+  /* Konqueror HTML */
+  -moz-user-select: none;
+  /* Old versions of Firefox */
+  -ms-user-select: none;
+  /* Internet Explorer/Edge */
+  user-select: none;
+  /* Non-prefixed version, currently
+             supported by Chrome, Edge, Opera and Firefox */
+  pointer-events: none;
+}
+
+.boardgame__ghostpiece span {
+  color: white;
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+}
+
+.boardgame__ghostpiece img {
+  width: 70%;
+  height: auto;
+  opacity: 0.5;
+  max-height: 70%;
+}
+
+.boardgame__ghostpieceshadow {
+  filter: blur(4px) brightness(0%);
+}
+
+/*
+@keyframes boardgame__float {
+  0% {
+    //box-shadow: 0 5px 15px 0px rgba(0, 0, 0, 0.6);
+    transform: translatey(0px);
+  }
+  50% {
+    //box-shadow: 0 25px 15px 0px rgba(0, 0, 0, 0.2);
+    transform: translatey(-20px);
+  }
+  100% {
+    //box-shadow: 0 5px 15px 0px rgba(0, 0, 0, 0.6);
+    transform: translatey(0px);
+  }
+}
+*/
 .boardgame_floatingpiece {
   pointer-events: none;
   position: fixed;
@@ -4809,20 +4850,25 @@ td, th {
 }
 
 .boardgame__board {
-  transition: 1s all;
-  transform: rotate(0deg);
   flex-grow: 1;
 }
 
+.boardgame__board-inner {
+  transition: 1s all;
+  transform: rotateX(0deg);
+  flex-grow: 1;
+  background-color: purple;
+  display: flex;
+  flex-direction: column;
+}
+
 .boardgame__boardflip {
-  transform: rotate(180deg);
+  transform: rotateX(180deg);
 }
 
 .boardgame__piece-set-wrapper {
-  z-index: 30;
-  height: 120px;
-  padding: 4px;
-  background-color: #b1b1b1;
+  width: 100px;
+  overflow-y: scroll;
 }
 
 .boardgame__piece-set-container {
@@ -4845,8 +4891,15 @@ td, th {
 }
 
 .boardgame__piece-set {
-  justify-content: center;
-  align-items: center;
+  width: 100%;
+  overflow-y: auto;
+  background-color: #e0e0e0;
+  flex-wrap: wrap;
+}
+
+.boardgame__piece-set-header {
+  font-size: 10px;
+  padding: 2px;
 }
 
 .boardgame__piece-set-vertical {
@@ -4876,12 +4929,15 @@ td, th {
   font-weight: bold;
 }
 
-.boardgame__verticalnotations {
-  display: flex;
-  flex-direction: column;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  width: 20px;
+.boardgame__piece-set__piece {
+  transition: 0.3s all;
+  font-size: 40px;
+  width: 50%;
+}
+
+.boardgame__piece-set-minimized > .boardgame__piece-set__piece {
+  width: 20%;
+  font-size: 10px;
 }
 
 .boardgame__verticalnotations > div {
@@ -4889,7 +4945,7 @@ td, th {
   text-align: center;
   justify-content: center;
   align-items: center;
-  padding: 4px;
+  width: 20px;
 }
 
 .boardgame__verticalnotations:last-child > div {
@@ -4902,8 +4958,7 @@ td, th {
   display: flex;
   justify-content: space-around;
   flex-direction: row;
-  padding-left: 24px;
-  padding-right: 24px;
+  height: 20px;
 }
 
 .boardgame__boardfliphnot {
@@ -4982,6 +5037,7 @@ td, th {
 }
 
 .boardgame__checkertile {
+  font-size: 40px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -4991,14 +5047,12 @@ td, th {
 .boardgame__piece {
   transition: 0.1s all;
   padding: 5%;
-  font-size: 10px;
-  color: rgba(255, 255, 255, 0);
-  text-shadow: 0 0 1px rgba(0, 0, 0, 0);
 }
 
-.boardgame__piece:hover {
+.boardgame__piece_fencode {
   color: white;
-  text-shadow: 0 0 1px black;
+  text-align: center;
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
 }
 
 .boardgame__piece > span {
@@ -5038,6 +5092,28 @@ td, th {
   width: 40px;
   height: 40px;
   clip-path: polygon(0% 25%, 0% 75%, 50% 100%, 100% 75%, 100% 25%, 50% 0%);
+}
+
+.boardgame__presets {
+  flex-direction: column;
+}
+
+.boardgame__preset {
+  padding: 4px;
+}
+
+.boardgame__presetdetails {
+  padding: 4px;
+}
+
+.boardgame__pattern {
+  background: red;
+  width: 100%;
+  height: 100%;
+}
+
+.boardgame__piecesvg {
+  background-color: red;
 }
 
 /**
@@ -5820,58 +5896,69 @@ td, th {
  * Copyright (c) 2020 Aleksej Komarov
  * SPDX-License-Identifier: MIT
  */
+.gameclock__window {
+  display: flex;
+  flex-direction: column;
+  padding: 5px;
+}
+
+.gameclock__wrapper {
+  flex-grow: 1;
+}
+
+.gameclock__sidewrapper {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+}
+
 .gameclock__configmodal {
   z-index: 20;
 }
 
 .gameclock__configmodal > .Dimmer__inner {
-  background-color: rgba(0, 0, 0, 0.5);
-  padding: 5%;
-  width: 75%;
-  height: 75%;
+  background-color: rgba(0, 0, 0, 0.8);
+  padding: 20px;
+  width: 320px;
+  height: 140px;
 }
 
-.gameclock__side {
-  padding: 8px;
+.gameclock__configmodalbuttoncontainer {
+  padding-top: 12px;
 }
 
-.gameclock__sideicon {
+.gameclock__teamicon {
   text-align: center;
   font-size: 24px;
-  padding-bottom: 8px;
+  margin: 5px;
+}
+
+.gameclock__sidepart {
+  flex-grow: 1;
+  padding: 5px;
 }
 
 .gameclock__timebutton {
   width: 100%;
-  height: 100px;
-  margin: 2px;
+  height: 100%;
   text-align: center;
-  font-size: 2em;
 }
 
-.gameclock__timeflex {
+.gameclock__mid {
+  margin-top: 30px;
+  padding: 5px;
+  display: flex;
   flex-direction: column;
-  display: flex;
-  justify-content: center;
   align-items: center;
-  height: 100%;
-}
-
-.gameclock__timebutton > i {
-  display: flex;
   justify-content: center;
-  align-items: center;
-  height: 100%;
-}
-
-.gameclock__swap {
-  padding-top: 16px;
 }
 
 .gameclock__utilbutton {
-  width: 28px;
-  height: 28px;
-  margin: 6px;
+  height: 30px;
+  width: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .gameclock__utilbutton > i {
@@ -5881,8 +5968,26 @@ td, th {
   height: 100%;
 }
 
-.gameclock__mid {
-  padding-top: 36px;
+.gameclock__timeflex {
+  flex-direction: column;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  font-size: 2em;
+}
+
+.gameclock__timebutton > i {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.gameclock__utilbutton > i {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .gas-canister-detonator-utility__list-item {

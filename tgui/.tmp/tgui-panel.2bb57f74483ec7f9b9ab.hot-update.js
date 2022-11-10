@@ -4,9 +4,9 @@ self["webpackHotUpdatetgui_workspace"]("tgui-panel",{},
 /******/ 
 /******/ /* webpack/runtime/getFullHash */
 /******/ !function() {
-/******/ 	__webpack_require__.h = function() { return "d26711566e8d00e09826"; }
+/******/ 	__webpack_require__.h = function() { return "1485e840951ec5ed0ea9"; }
 /******/ }();
 /******/ 
 /******/ }
 );
-//# sourceMappingURL=tgui-panel.e720225895a0452d3e99.hot-update.js.map
+//# sourceMappingURL=tgui-panel.2bb57f74483ec7f9b9ab.hot-update.js.map
