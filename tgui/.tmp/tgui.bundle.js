@@ -11746,6 +11746,19 @@ var FlockPartitions = function FlockPartitions(props, context) {
                   children: (0, _inferno.createComponentVNode)(2, _components.Button, {
                     "onClick": function () {
                       function onClick() {
+                        return act('promote_trace', {
+                          'origin': partition.ref
+                        });
+                      }
+
+                      return onClick;
+                    }(),
+                    children: "Promote sentience"
+                  })
+                }), (0, _inferno.createComponentVNode)(2, _components.Stack.Item, {
+                  children: (0, _inferno.createComponentVNode)(2, _components.Button, {
+                    "onClick": function () {
+                      function onClick() {
                         return act('delete_trace', {
                           'origin': partition.ref
                         });
@@ -12395,24 +12408,29 @@ var Gameclock = function Gameclock(_props, context) {
   var _useBackend = (0, _backend.useBackend)(context),
       data = _useBackend.data;
 
+  var name = data.clockStatic.name;
+
   var _useLocalState = (0, _backend.useLocalState)(context, 'configModalOpen', false),
       configModalOpen = _useLocalState[0];
 
+  var _useLocalState2 = (0, _backend.useLocalState)(context, 'swap', false),
+      swap = _useLocalState2[0];
+
   return (0, _inferno.createComponentVNode)(2, _layouts.Window, {
-    "title": 'Game Clock',
+    "title": name,
     "width": 220,
     "height": 350,
     children: (0, _inferno.createComponentVNode)(2, _layouts.Window.Content, {
       "className": "gameclock__window",
       "fitted": true,
       children: [configModalOpen && (0, _inferno.createComponentVNode)(2, ConfigModal), (0, _inferno.createComponentVNode)(2, TeamIcon, {
-        "team": data.swap ? 'white' : 'black'
+        "team": swap ? 'white' : 'black'
       }), (0, _inferno.createComponentVNode)(2, SidePart, {
-        "team": data.swap ? 'white' : 'black'
+        "team": swap ? 'white' : 'black'
       }), (0, _inferno.createComponentVNode)(2, MidPart), (0, _inferno.createComponentVNode)(2, SidePart, {
-        "team": data.swap ? 'black' : 'white'
+        "team": swap ? 'black' : 'white'
       }), (0, _inferno.createComponentVNode)(2, TeamIcon, {
-        "team": data.swap ? 'black' : 'white'
+        "team": swap ? 'black' : 'white'
       })]
     })
   });
@@ -12424,14 +12442,14 @@ var ConfigModal = function ConfigModal(_, context) {
   var _useBackend2 = (0, _backend.useBackend)(context),
       act = _useBackend2.act;
 
-  var _useLocalState2 = (0, _backend.useLocalState)(context, 'configModalOpen', false),
-      setConfigModalOpen = _useLocalState2[1];
+  var _useLocalState3 = (0, _backend.useLocalState)(context, 'configModalOpen', false),
+      setConfigModalOpen = _useLocalState3[1];
 
-  var _useLocalState3 = (0, _backend.useLocalState)(context, 'whiteTimeBuffer', 0),
-      whiteTimeBuffer = _useLocalState3[0];
+  var _useLocalState4 = (0, _backend.useLocalState)(context, 'whiteTimeBuffer', 0),
+      whiteTimeBuffer = _useLocalState4[0];
 
-  var _useLocalState4 = (0, _backend.useLocalState)(context, 'blackTimeBuffer', 0),
-      blackTimeBuffer = _useLocalState4[0];
+  var _useLocalState5 = (0, _backend.useLocalState)(context, 'blackTimeBuffer', 0),
+      blackTimeBuffer = _useLocalState5[0];
 
   var setTime = function setTime(whiteTime, blackTime) {
     act('set_time', {
@@ -12462,7 +12480,6 @@ var ConfigModal = function ConfigModal(_, context) {
           function onClick() {
             setConfigModalOpen(false);
             setTime(whiteTimeBuffer, blackTimeBuffer);
-            act('set_turn');
           }
 
           return onClick;
@@ -12490,13 +12507,13 @@ var TimeInput = function TimeInput(props, context) {
       maxTime = _data$clockStatic.maxTime;
   var team = props.team;
 
-  var _useLocalState5 = (0, _backend.useLocalState)(context, 'whiteTimeBuffer', 0),
-      whiteTimeBuffer = _useLocalState5[0],
-      setWhiteTimeBuffer = _useLocalState5[1];
+  var _useLocalState6 = (0, _backend.useLocalState)(context, 'whiteTimeBuffer', 0),
+      whiteTimeBuffer = _useLocalState6[0],
+      setWhiteTimeBuffer = _useLocalState6[1];
 
-  var _useLocalState6 = (0, _backend.useLocalState)(context, 'blackTimeBuffer', 0),
-      blackTimeBuffer = _useLocalState6[0],
-      setBlackTimeBuffer = _useLocalState6[1];
+  var _useLocalState7 = (0, _backend.useLocalState)(context, 'blackTimeBuffer', 0),
+      blackTimeBuffer = _useLocalState7[0],
+      setBlackTimeBuffer = _useLocalState7[1];
 
   var showTime = function showTime(value) {
     return (0, _format.formatTime)(value * 10);
@@ -12575,14 +12592,18 @@ var MidPart = function MidPart(_, context) {
       data = _useBackend5.data,
       act = _useBackend5.act;
 
-  var _useLocalState7 = (0, _backend.useLocalState)(context, 'configModalOpen', false),
-      setConfigModalOpen = _useLocalState7[1];
+  var _useLocalState8 = (0, _backend.useLocalState)(context, 'configModalOpen', false),
+      setConfigModalOpen = _useLocalState8[1];
 
-  var _useLocalState8 = (0, _backend.useLocalState)(context, 'whiteTimeBuffer', 0),
-      setWhiteTimeBuffer = _useLocalState8[1];
+  var _useLocalState9 = (0, _backend.useLocalState)(context, 'whiteTimeBuffer', 0),
+      setWhiteTimeBuffer = _useLocalState9[1];
 
-  var _useLocalState9 = (0, _backend.useLocalState)(context, 'blackTimeBuffer', 0),
-      setBlackTimeBuffer = _useLocalState9[1];
+  var _useLocalState10 = (0, _backend.useLocalState)(context, 'blackTimeBuffer', 0),
+      setBlackTimeBuffer = _useLocalState10[1];
+
+  var _useLocalState11 = (0, _backend.useLocalState)(context, 'swap', false),
+      swap = _useLocalState11[0],
+      toggleSwap = _useLocalState11[1];
 
   return (0, _inferno.createComponentVNode)(2, _components.Stack, {
     "direction": 'row',
@@ -12640,12 +12661,12 @@ var MidPart = function MidPart(_, context) {
       children: (0, _inferno.createComponentVNode)(2, _components.Button, {
         "className": "gameclock__utilbutton",
         "disabled": data.timing,
-        "tooltip": "Swap sides",
+        "tooltip": "Rotate view",
         "tooltipPosition": "top",
-        "icon": "exchange-alt",
+        "icon": "rotate",
         "onClick": function () {
           function onClick() {
-            return act('swap');
+            return toggleSwap(!swap);
           }
 
           return onClick;
@@ -27376,7 +27397,7 @@ exports.sanitizeText = sanitizeText;
 
 // extracted by mini-css-extract-plugin
     if(true) {
-      // 1668134241955
+      // 1668174174949
       var cssReload = __webpack_require__(/*! ./.yarn/$$virtual/mini-css-extract-plugin-virtual-3129e88c60/0/cache/mini-css-extract-plugin-npm-1.5.0-2fc744c5c1-b666770b3b.zip/node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js */ "./.yarn/$$virtual/mini-css-extract-plugin-virtual-3129e88c60/0/cache/mini-css-extract-plugin-npm-1.5.0-2fc744c5c1-b666770b3b.zip/node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js")(module.id, {"esModule":false,"locals":false});
       module.hot.dispose(cssReload);
       module.hot.accept(undefined, cssReload);
@@ -27393,7 +27414,7 @@ exports.sanitizeText = sanitizeText;
 
 // extracted by mini-css-extract-plugin
     if(true) {
-      // 1668134241948
+      // 1668174174926
       var cssReload = __webpack_require__(/*! ./.yarn/$$virtual/mini-css-extract-plugin-virtual-3129e88c60/0/cache/mini-css-extract-plugin-npm-1.5.0-2fc744c5c1-b666770b3b.zip/node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js */ "./.yarn/$$virtual/mini-css-extract-plugin-virtual-3129e88c60/0/cache/mini-css-extract-plugin-npm-1.5.0-2fc744c5c1-b666770b3b.zip/node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js")(module.id, {"esModule":false,"locals":false});
       module.hot.dispose(cssReload);
       module.hot.accept(undefined, cssReload);
@@ -27410,7 +27431,7 @@ exports.sanitizeText = sanitizeText;
 
 // extracted by mini-css-extract-plugin
     if(true) {
-      // 1668134241963
+      // 1668174174954
       var cssReload = __webpack_require__(/*! ./.yarn/$$virtual/mini-css-extract-plugin-virtual-3129e88c60/0/cache/mini-css-extract-plugin-npm-1.5.0-2fc744c5c1-b666770b3b.zip/node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js */ "./.yarn/$$virtual/mini-css-extract-plugin-virtual-3129e88c60/0/cache/mini-css-extract-plugin-npm-1.5.0-2fc744c5c1-b666770b3b.zip/node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js")(module.id, {"esModule":false,"locals":false});
       module.hot.dispose(cssReload);
       module.hot.accept(undefined, cssReload);
@@ -27427,7 +27448,7 @@ exports.sanitizeText = sanitizeText;
 
 // extracted by mini-css-extract-plugin
     if(true) {
-      // 1668134241960
+      // 1668174174952
       var cssReload = __webpack_require__(/*! ./.yarn/$$virtual/mini-css-extract-plugin-virtual-3129e88c60/0/cache/mini-css-extract-plugin-npm-1.5.0-2fc744c5c1-b666770b3b.zip/node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js */ "./.yarn/$$virtual/mini-css-extract-plugin-virtual-3129e88c60/0/cache/mini-css-extract-plugin-npm-1.5.0-2fc744c5c1-b666770b3b.zip/node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js")(module.id, {"esModule":false,"locals":false});
       module.hot.dispose(cssReload);
       module.hot.accept(undefined, cssReload);
@@ -27444,7 +27465,7 @@ exports.sanitizeText = sanitizeText;
 
 // extracted by mini-css-extract-plugin
     if(true) {
-      // 1668134241934
+      // 1668174174916
       var cssReload = __webpack_require__(/*! ./.yarn/$$virtual/mini-css-extract-plugin-virtual-3129e88c60/0/cache/mini-css-extract-plugin-npm-1.5.0-2fc744c5c1-b666770b3b.zip/node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js */ "./.yarn/$$virtual/mini-css-extract-plugin-virtual-3129e88c60/0/cache/mini-css-extract-plugin-npm-1.5.0-2fc744c5c1-b666770b3b.zip/node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js")(module.id, {"esModule":false,"locals":false});
       module.hot.dispose(cssReload);
       module.hot.accept(undefined, cssReload);
@@ -27461,7 +27482,7 @@ exports.sanitizeText = sanitizeText;
 
 // extracted by mini-css-extract-plugin
     if(true) {
-      // 1668134241944
+      // 1668174174921
       var cssReload = __webpack_require__(/*! ./.yarn/$$virtual/mini-css-extract-plugin-virtual-3129e88c60/0/cache/mini-css-extract-plugin-npm-1.5.0-2fc744c5c1-b666770b3b.zip/node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js */ "./.yarn/$$virtual/mini-css-extract-plugin-virtual-3129e88c60/0/cache/mini-css-extract-plugin-npm-1.5.0-2fc744c5c1-b666770b3b.zip/node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js")(module.id, {"esModule":false,"locals":false});
       module.hot.dispose(cssReload);
       module.hot.accept(undefined, cssReload);
@@ -27478,7 +27499,7 @@ exports.sanitizeText = sanitizeText;
 
 // extracted by mini-css-extract-plugin
     if(true) {
-      // 1668134241946
+      // 1668174174923
       var cssReload = __webpack_require__(/*! ./.yarn/$$virtual/mini-css-extract-plugin-virtual-3129e88c60/0/cache/mini-css-extract-plugin-npm-1.5.0-2fc744c5c1-b666770b3b.zip/node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js */ "./.yarn/$$virtual/mini-css-extract-plugin-virtual-3129e88c60/0/cache/mini-css-extract-plugin-npm-1.5.0-2fc744c5c1-b666770b3b.zip/node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js")(module.id, {"esModule":false,"locals":false});
       module.hot.dispose(cssReload);
       module.hot.accept(undefined, cssReload);
@@ -27495,7 +27516,7 @@ exports.sanitizeText = sanitizeText;
 
 // extracted by mini-css-extract-plugin
     if(true) {
-      // 1668134241966
+      // 1668174174957
       var cssReload = __webpack_require__(/*! ./.yarn/$$virtual/mini-css-extract-plugin-virtual-3129e88c60/0/cache/mini-css-extract-plugin-npm-1.5.0-2fc744c5c1-b666770b3b.zip/node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js */ "./.yarn/$$virtual/mini-css-extract-plugin-virtual-3129e88c60/0/cache/mini-css-extract-plugin-npm-1.5.0-2fc744c5c1-b666770b3b.zip/node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js")(module.id, {"esModule":false,"locals":false});
       module.hot.dispose(cssReload);
       module.hot.accept(undefined, cssReload);
@@ -27985,7 +28006,7 @@ webpackContext.id = "./packages/tgui/interfaces sync recursive ^\\.\\/.*$";
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	!function() {
-/******/ 		__webpack_require__.h = function() { return "2525feb7adbcc472a4c1"; }
+/******/ 		__webpack_require__.h = function() { return "16ceca1616563eff2370"; }
 /******/ 	}();
 /******/ 	
 /******/ 	/* webpack/runtime/global */

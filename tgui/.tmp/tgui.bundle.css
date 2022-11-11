@@ -1556,10 +1556,6 @@ td, th {
   content: ".";
 }
 
-.Image--pixelated {
-  -ms-interpolation-mode: nearest-neighbor;
-}
-
 /**
  * Copyright (c) 2020 Aleksej Komarov
  * SPDX-License-Identifier: MIT

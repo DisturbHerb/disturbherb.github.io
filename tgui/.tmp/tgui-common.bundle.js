@@ -37057,7 +37057,10 @@ var Image = function Image(props) {
   return (0, _inferno.normalizeProps)((0, _inferno.createComponentVNode)(2, _Box.Box, Object.assign({
     "as": "img"
   }, rest, {
-    "className": (0, _react.classes)("Image", pixelated && "Image--pixelated", className)
+    "style": pixelated && {
+      '-ms-interpolation-mode': 'nearest-neighbor'
+    },
+    "className": (0, _react.classes)("Image", className)
   })));
 };
 
