@@ -2274,7 +2274,7 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
 var FenCodeSettings = function FenCodeSettings(_props, context) {
-  var _useLocalState = (0, _backend.useLocalState)(context, 'tabIndex', 0),
+  var _useLocalState = (0, _backend.useLocalState)(context, 'tabIndex', 1),
       tabIndex = _useLocalState[0],
       setTabIndex = _useLocalState[1];
 
@@ -2282,11 +2282,12 @@ var FenCodeSettings = function FenCodeSettings(_props, context) {
       configModalOpen = _useLocalState2[0],
       setConfigModalOpen = _useLocalState2[1];
 
-  return configModalOpen && (0, _inferno.createComponentVNode)(2, _components.Dimmer, {
-    "className": "boardgame__configmodal",
+  return configModalOpen && (0, _inferno.createComponentVNode)(2, _components.Box, {
+    "className": "boardgame__modal",
     children: (0, _inferno.createComponentVNode)(2, _components.Box, {
-      "className": "boardgame__settings",
+      "className": "boardgame__modal-inner",
       children: [(0, _inferno.createComponentVNode)(2, _components.Tabs, {
+        "className": "boardgame__modal-tabs",
         children: [(0, _inferno.createComponentVNode)(2, _components.Tabs.Tab, {
           "selected": tabIndex === 1,
           "onClick": function () {
@@ -2318,7 +2319,7 @@ var FenCodeSettings = function FenCodeSettings(_props, context) {
           children: "Close"
         })]
       }), (0, _inferno.createComponentVNode)(2, _components.Box, {
-        "className": "boardgame__settingspart",
+        "className": "boardgame__modal-config",
         children: [tabIndex === 1 && (0, _inferno.createComponentVNode)(2, ConfigTab), tabIndex === 2 && (0, _inferno.createComponentVNode)(2, PresetsTab)]
       })]
     })
@@ -2884,100 +2885,43 @@ var PresetsTab = function PresetsTab(_props, context) {
 
   var _useLocalState5 = (0, _backend.useLocalState)(context, 'configModalOpen', false),
       configModalOpen = _useLocalState5[0],
-      setConfigModalOpen = _useLocalState5[1];
+      setConfigModalOpen = _useLocalState5[1]; // Orgainize the presets by game, key is the game name, value is the presets for that game
 
-  var _useLocalState6 = (0, _backend.useLocalState)(context, 'selectedGame', null),
-      selectedGame = _useLocalState6[0],
-      setSelectedGame = _useLocalState6[1];
-
-  var presets = (0, _Presets.presetsByGame)(); // Orgainize the presets by game, key is the game name, value is the presets for that game
-  // Style it in a grid
 
   return (0, _inferno.createComponentVNode)(2, _components.Flex, {
     "className": "boardgame__presets",
-    children: [(0, _inferno.createComponentVNode)(2, _components.Dropdown), Object.keys(presets).map(function (game, i) {
+    children: _Presets.presets.map(function (preset, i) {
+      var setup = preset.setup; // if setup is a function, call it to get the setup
+
+      var setupString = typeof setup === 'function' ? setup() : setup;
       return (0, _inferno.createComponentVNode)(2, _components.Flex.Item, {
-        children: [(0, _inferno.createVNode)(1, "h3", null, game, 0), (0, _inferno.createComponentVNode)(2, _components.Flex, {
-          "direction": "column",
-          children: presets[game].map(function (preset, i) {
-            return (0, _inferno.createComponentVNode)(2, _components.Flex.Item, {
-              "className": "boardgame__preset",
-              children: (0, _inferno.createComponentVNode)(2, _components.Flex, {
-                children: [(0, _inferno.createComponentVNode)(2, _components.Flex.Item, {
-                  children: (0, _inferno.createComponentVNode)(2, GenerateSvgBoard, {
-                    "preset": preset.setup
-                  })
-                }), (0, _inferno.createComponentVNode)(2, _components.Flex.Item, {
-                  "grow": 1,
-                  "className": "boardgame__presetdetails",
-                  children: [(0, _inferno.createVNode)(1, "h4", null, preset.name, 0), (0, _inferno.createVNode)(1, "p", null, preset.description, 0)]
-                }), (0, _inferno.createComponentVNode)(2, _components.Flex.Item, {
-                  children: [(0, _inferno.createComponentVNode)(2, _components.Button, {
-                    "onClick": function () {
-                      function onClick() {
-                        act('applyGNot', {
-                          gnot: preset.setup
-                        });
-                        setConfigModalOpen(false);
-                      }
+        "className": "boardgame__preset",
+        "onClick": function () {
+          function onClick() {
+            act('applyGNot', {
+              gnot: setupString
+            });
+            setConfigModalOpen(false);
+          }
 
-                      return onClick;
-                    }(),
-                    children: "Play"
-                  }), (0, _inferno.createComponentVNode)(2, _components.Button, {
-                    "onClick": function () {
-                      function onClick() {
-                        act('applyGNot', {
-                          gnot: preset.setup
-                        });
-                        setConfigModalOpen(false);
-                      }
-
-                      return onClick;
-                    }(),
-                    children: "Info"
-                  })]
-                })]
+          return onClick;
+        }(),
+        children: (0, _inferno.createComponentVNode)(2, _components.Tooltip, {
+          "position": "top",
+          "content": preset.name,
+          children: (0, _inferno.createComponentVNode)(2, _components.Flex, {
+            "position": "relative",
+            children: (0, _inferno.createComponentVNode)(2, _components.Flex.Item, {
+              children: (0, _inferno.createComponentVNode)(2, GenerateSvgBoard, {
+                "preset": setupString
               })
-            }, i);
+            })
           })
-        })]
+        })
       }, i);
-    })]
+    })
   });
 };
-/** const PresetsTab = (_props, context) => {
-  const { act, data } = useBackend<BoardgameData>(context);
-  const [configModalOpen, setConfigModalOpen] = useLocalState(context, 'configModalOpen', false);
-
-  // Orgainize the presets by game, key is the game name, value is the presets for that game
-
-  return (
-    <Flex className="boardgame__presets">
-      {presets.map((preset, i) => {
-        return (
-          <Flex.Item
-            key={i}
-            className="boardgame__preset"
-            onClick={() => {
-              act('applyGNot', {
-                gnot: preset.setup,
-              });
-              setConfigModalOpen(false);
-            }}>
-            <Tooltip position="top" content={preset.name}>
-              <Flex position="relative">
-                <Flex.Item>
-                  <GenerateSvgBoard preset={preset.setup} />
-                </Flex.Item>
-              </Flex>
-            </Tooltip>
-          </Flex.Item>
-        );
-      })}
-    </Flex>
-  );
-}; */
 
 /***/ }),
 
@@ -3264,17 +3208,12 @@ var PieceDrawer = function PieceDrawer(orps, context) {
       expandedSets = _useLocalState[0],
       setExpandedSets = _useLocalState[1];
 
-  var _useLocalState2 = (0, _backend.useLocalState)(context, 'paletteSelected', ''),
-      paletteSelected = _useLocalState2[0],
-      setPaletteSelected = _useLocalState2[1];
-
   return (0, _inferno.createComponentVNode)(2, _components.Box, {
     "onMouseUp": function () {
       function onMouseUp() {
-        act('pawnRemoveHeld', {
+        act('paletteClear', {
           ckey: currentUser.ckey
         });
-        setPaletteSelected('');
       }
 
       return onMouseUp;
@@ -3299,7 +3238,10 @@ var PieceDrawer = function PieceDrawer(orps, context) {
               "className": "boardgame__piece-set__piece",
               "onMouseDown": function () {
                 function onMouseDown() {
-                  setPaletteSelected(piece.fenCode);
+                  act('paletteSet', {
+                    ckey: currentUser.ckey,
+                    code: piece.fenCode
+                  });
                 }
 
                 return onMouseDown;
@@ -3322,9 +3264,9 @@ var ExpandedSetsButton = function ExpandedSetsButton(_ref, context) {
   var index = _ref.index,
       setId = _ref.setId;
 
-  var _useLocalState3 = (0, _backend.useLocalState)(context, "expandedSets", []),
-      expandedSets = _useLocalState3[0],
-      setExpandedSets = _useLocalState3[1];
+  var _useLocalState2 = (0, _backend.useLocalState)(context, "expandedSets", []),
+      expandedSets = _useLocalState2[0],
+      setExpandedSets = _useLocalState2[1];
 
   return (0, _inferno.createComponentVNode)(2, _components.Button.Checkbox, {
     "className": "boardgame__piece-set-toggle",
@@ -3588,42 +3530,26 @@ var Pattern = function Pattern(_ref2, context) {
   var width = 100 / data.boardInfo.width;
   var height = 100 / data.boardInfo.height;
 
-  var _useLocalState = (0, _backend.useLocalState)(context, 'tileSize', {
-    width: 0,
-    height: 0
-  }),
-      tileSize = _useLocalState[0],
-      setTileSize = _useLocalState[1];
-
-  var _useLocalState2 = (0, _backend.useLocalState)(context, 'mouseCoords', {
+  var _useLocalState = (0, _backend.useLocalState)(context, 'translateCoords', {
     x: 0,
     y: 0
   }),
-      mouseCoords = _useLocalState2[0],
-      setMouseCoords = _useLocalState2[1];
-
-  var _useLocalState3 = (0, _backend.useLocalState)(context, 'translateCoords', {
-    x: 0,
-    y: 0
-  }),
-      translateCoords = _useLocalState3[0],
-      setTranslateCoords = _useLocalState3[1];
+      translateCoords = _useLocalState[0],
+      setTranslateCoords = _useLocalState[1];
 
   var pieceRecords = (0, _Pieces.fenCodeRecordFromPieces)((0, _Pieces.fetchPieces)());
 
-  var _useLocalState4 = (0, _backend.useLocalState)(context, 'paletteSelected', ''),
-      paletteSelected = _useLocalState4[0],
-      setPaletteSelected = _useLocalState4[1];
+  var _useLocalState2 = (0, _backend.useLocalState)(context, 'paletteSelected', ''),
+      paletteSelected = _useLocalState2[0],
+      setPaletteSelected = _useLocalState2[1];
 
-  var _useLocalState5 = (0, _backend.useLocalState)(context, 'patternMulti', 1),
-      patternMulti = _useLocalState5[0],
-      setPatternMulti = _useLocalState5[1];
+  var _useLocalState3 = (0, _backend.useLocalState)(context, 'patternMulti', 1),
+      patternMulti = _useLocalState3[0],
+      setPatternMulti = _useLocalState3[1];
 
   return (0, _inferno.createVNode)(32, "svg", null, [(0, _inferno.createComponentVNode)(2, PatternToUse, {
     "pattern": pattern
-  }), // Draw a 😊 emoji
-  // Map through every piece in pieces by Object key
-  Object.keys(pieces).map(function (val, index) {
+  }), Object.keys(pieces).map(function (val, index) {
     var _pieces$val = pieces[val],
         x = _pieces$val.x,
         y = _pieces$val.y,
@@ -3671,15 +3597,13 @@ var Pattern = function Pattern(_ref2, context) {
               ckey: currentUser.ckey,
               pId: val
             });
-            setPaletteSelected(code);
           }
         }
 
         return onmousedown;
       }(),
       "onmouseup": function () {
-        function onmouseup(e) {
-          setPaletteSelected(''); // Deselect the pawn if it is itself
+        function onmouseup(e) {// Deselect the pawn if it is itself
         }
 
         return onmouseup;
@@ -3752,24 +3676,11 @@ var Pattern = function Pattern(_ref2, context) {
           x: boardX,
           y: boardY
         });
-
-        if (paletteSelected.length > 0) {
-          if (currentUser.selected) {
-            act('pawnPlace', {
-              ckey: currentUser.ckey,
-              x: boardX,
-              y: boardY
-            });
-          } else {
-            act('pawnCreate', {
-              fenCode: paletteSelected,
-              x: boardX,
-              y: boardY
-            });
-          }
-
-          setPaletteSelected('');
-        }
+        act('pawnPlace', {
+          ckey: currentUser.ckey,
+          x: boardX,
+          y: boardY
+        });
       }
 
       return onmouseup;
@@ -4173,6 +4084,8 @@ exports.default = _default;
 
 exports.__esModule = true;
 exports.default = exports.presetsByGame = exports.getPresetsBySize = exports.presets = void 0;
+
+/* eslint-disable max-len */
 var presets = [];
 exports.presets = presets;
 presets.push({
@@ -4188,6 +4101,56 @@ presets.push({
   game: 'chess',
   description: 'Apart from the usual king and pawns, one side has three queens and the other has seven knights.',
   setup: 'n,n,n,n,k,n,n,n,p,p,p,p,p,p,p,p,32,P,P,P,P,P,P,P,P,1,Q,1,Q,K,1,Q,1',
+  boardWidth: 8,
+  boardHeight: 8
+});
+presets.push({
+  name: 'Horde',
+  game: 'chess',
+  description: "In this variant, White's pawns on the first and second ranks may advance one or two steps, provided that the path in the file is free. Unlike in regular chess, this does not have to be the pawn's first move",
+  setup: 'r,n,b,q,k,b,n,r,p,p,p,p,p,p,p,p,8,1,P,P,2,P,P,1,P,P,P,P,P,P,P,P,P,P,P,P,P,P,P,P,P,P,P,P,P,P,P,P,P,P,P,P,P,P,P,P',
+  boardWidth: 8,
+  boardHeight: 8
+});
+presets.push({
+  name: 'Racing Kings',
+  game: 'chess',
+  description: "In Racing Kings the object is not to trap or capture your opponent's king, but instead it is a race to the 8th rank! ",
+  setup: '48,k,r,b,n,N,B,R,K,q,r,b,n,N,B,R,Q',
+  boardWidth: 8,
+  boardHeight: 8
+});
+presets.push({
+  name: 'Displacement chess',
+  game: 'chess',
+  description: "Displacement chess is a family of chess variants in which a few pieces are transposed in the initial standard chess position. The main goal of these variants is to negate players' knowledge of standard chess openings.",
+  setup: function () {
+    function setup() {
+      var board = [];
+      var pawns = ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'];
+      var special = ['n', 'b', 'r', 'q', 'k', 'r', 'b', 'n']; // Shuffle the special pieces
+
+      for (var i = special.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var _ref = [special[j], special[i]];
+        special[i] = _ref[0];
+        special[j] = _ref[1];
+      }
+
+      board.push(special);
+      board.push(pawns);
+      board.push(32);
+      board.push(pawns.map(function () {
+        return 'P';
+      }));
+      board.push(special.map(function (v) {
+        return v.toUpperCase();
+      }));
+      return board.join(',');
+    }
+
+    return setup;
+  }(),
   boardWidth: 8,
   boardHeight: 8
 });
@@ -4557,7 +4520,7 @@ var Boardgame = function Boardgame(_props, context) {
       }(),
       "fitted": true,
       "className": "boardgame__window",
-      children: [(0, _inferno.createComponentVNode)(2, GhostPiecesContainer), paletteSelected && (0, _inferno.createComponentVNode)(2, HeldPieceRenderer), (0, _inferno.createComponentVNode)(2, _components.Box, {
+      children: [(0, _inferno.createComponentVNode)(2, GhostPiecesContainer), (currentUser.palette || currentUser.selected) && (0, _inferno.createComponentVNode)(2, HeldPieceRenderer), (0, _inferno.createComponentVNode)(2, _components.Box, {
         "className": "boardgame__debug",
         children: [translateCoords.x, " ", translateCoords.y, "-", boardSize.width, " ", boardSize.height, "-", mouseCoords.x, " ", mouseCoords.y, (0, _inferno.createVNode)(1, "span", null, "Flip board", 16), (0, _inferno.createComponentVNode)(2, _components.Button.Checkbox, {
           "checked": flip,
@@ -4607,6 +4570,8 @@ var Boardgame = function Boardgame(_props, context) {
 exports.Boardgame = Boardgame;
 
 var HeldPieceRenderer = function HeldPieceRenderer(_, context) {
+  var _currentUser$selected;
+
   var _useBackend3 = (0, _backend.useBackend)(context),
       act = _useBackend3.act,
       data = _useBackend3.data;
@@ -4620,13 +4585,11 @@ var HeldPieceRenderer = function HeldPieceRenderer(_, context) {
       mouseCoords = _useLocalState10[0],
       setMouseCoords = _useLocalState10[1];
 
-  var _useLocalState11 = (0, _backend.useLocalState)(context, 'paletteSelected', ''),
-      paletteSelected = _useLocalState11[0],
-      setPaletteSelected = _useLocalState11[1];
+  var code = currentUser.palette || ((_currentUser$selected = currentUser.selected) == null ? void 0 : _currentUser$selected.code);
 
-  if (paletteSelected.length > 0) {
+  if (code) {
     var pieces = (0, _Pieces.fetchPieces)();
-    var piece = (0, _Pieces.fenCodeRecordFromPieces)(pieces)[paletteSelected]; // Draw the piece with svg fixed to the mouse
+    var piece = (0, _Pieces.fenCodeRecordFromPieces)(pieces)[code]; // Draw the piece with svg fixed to the mouse
 
     return (0, _inferno.createComponentVNode)(2, _components.Box, {
       "className": "boardgame__heldpiece",
@@ -12436,29 +12399,20 @@ var Gameclock = function Gameclock(_props, context) {
       configModalOpen = _useLocalState[0];
 
   return (0, _inferno.createComponentVNode)(2, _layouts.Window, {
-    "title": 'Board Game Clock',
-    "width": 400,
-    "height": 230,
+    "title": 'Game Clock',
+    "width": 220,
+    "height": 350,
     children: (0, _inferno.createComponentVNode)(2, _layouts.Window.Content, {
       "className": "gameclock__window",
       "fitted": true,
-      children: [configModalOpen && (0, _inferno.createComponentVNode)(2, ConfigModal), (0, _inferno.createComponentVNode)(2, _components.Flex, {
-        "className": "gameclock__wrapper",
-        children: [(0, _inferno.createComponentVNode)(2, _components.Flex.Item, {
-          "className": "gameclock__sidewrapper",
-          children: [(0, _inferno.createComponentVNode)(2, TeamIcon, {
-            "team": data.swap ? 'black' : 'white'
-          }), (0, _inferno.createComponentVNode)(2, SidePart, {
-            "team": data.swap ? 'black' : 'white'
-          })]
-        }), (0, _inferno.createComponentVNode)(2, MidPart), (0, _inferno.createComponentVNode)(2, _components.Flex.Item, {
-          "className": "gameclock__sidewrapper",
-          children: [(0, _inferno.createComponentVNode)(2, TeamIcon, {
-            "team": data.swap ? 'white' : 'black'
-          }), (0, _inferno.createComponentVNode)(2, SidePart, {
-            "team": data.swap ? 'white' : 'black'
-          })]
-        })]
+      children: [configModalOpen && (0, _inferno.createComponentVNode)(2, ConfigModal), (0, _inferno.createComponentVNode)(2, TeamIcon, {
+        "team": data.swap ? 'white' : 'black'
+      }), (0, _inferno.createComponentVNode)(2, SidePart, {
+        "team": data.swap ? 'white' : 'black'
+      }), (0, _inferno.createComponentVNode)(2, MidPart), (0, _inferno.createComponentVNode)(2, SidePart, {
+        "team": data.swap ? 'black' : 'white'
+      }), (0, _inferno.createComponentVNode)(2, TeamIcon, {
+        "team": data.swap ? 'black' : 'white'
       })]
     })
   });
@@ -12473,15 +12427,11 @@ var ConfigModal = function ConfigModal(_, context) {
   var _useLocalState2 = (0, _backend.useLocalState)(context, 'configModalOpen', false),
       setConfigModalOpen = _useLocalState2[1];
 
-  var _useLocalState3 = (0, _backend.useLocalState)(context, 'turnBuffer', true),
-      turnBuffer = _useLocalState3[0],
-      setTurnBuffer = _useLocalState3[1];
+  var _useLocalState3 = (0, _backend.useLocalState)(context, 'whiteTimeBuffer', 0),
+      whiteTimeBuffer = _useLocalState3[0];
 
-  var _useLocalState4 = (0, _backend.useLocalState)(context, 'whiteTimeBuffer', 0),
-      whiteTimeBuffer = _useLocalState4[0];
-
-  var _useLocalState5 = (0, _backend.useLocalState)(context, 'blackTimeBuffer', 0),
-      blackTimeBuffer = _useLocalState5[0];
+  var _useLocalState4 = (0, _backend.useLocalState)(context, 'blackTimeBuffer', 0),
+      blackTimeBuffer = _useLocalState4[0];
 
   var setTime = function setTime(whiteTime, blackTime) {
     act('set_time', {
@@ -12494,18 +12444,6 @@ var ConfigModal = function ConfigModal(_, context) {
     "className": "gameclock__configmodal",
     children: [(0, _inferno.createComponentVNode)(2, _components.LabeledList, {
       children: [(0, _inferno.createComponentVNode)(2, _components.LabeledList.Item, {
-        "label": "Current Turn",
-        children: (0, _inferno.createComponentVNode)(2, _components.Button, {
-          "content": turnBuffer ? 'White' : 'Black',
-          "onClick": function () {
-            function onClick() {
-              return setTurnBuffer(!turnBuffer);
-            }
-
-            return onClick;
-          }()
-        })
-      }), (0, _inferno.createComponentVNode)(2, _components.LabeledList.Item, {
         "label": "Time (White)",
         children: (0, _inferno.createComponentVNode)(2, TimeInput, {
           "team": 'white'
@@ -12519,20 +12457,18 @@ var ConfigModal = function ConfigModal(_, context) {
     }), (0, _inferno.createComponentVNode)(2, _components.Box, {
       "className": "gameclock__configmodalbuttoncontainer",
       children: [(0, _inferno.createComponentVNode)(2, _components.Button, {
-        "content": "Apply and close",
+        "content": "Apply",
         "onClick": function () {
           function onClick() {
             setConfigModalOpen(false);
             setTime(whiteTimeBuffer, blackTimeBuffer);
-            act('set_turn', {
-              'nextTurn': turnBuffer
-            });
+            act('set_turn');
           }
 
           return onClick;
         }()
       }), (0, _inferno.createComponentVNode)(2, _components.Button, {
-        "content": "Close without applying",
+        "content": "Cancel",
         "onClick": function () {
           function onClick() {
             return setConfigModalOpen(false);
@@ -12554,13 +12490,13 @@ var TimeInput = function TimeInput(props, context) {
       maxTime = _data$clockStatic.maxTime;
   var team = props.team;
 
-  var _useLocalState6 = (0, _backend.useLocalState)(context, 'whiteTimeBuffer', 0),
-      whiteTimeBuffer = _useLocalState6[0],
-      setWhiteTimeBuffer = _useLocalState6[1];
+  var _useLocalState5 = (0, _backend.useLocalState)(context, 'whiteTimeBuffer', 0),
+      whiteTimeBuffer = _useLocalState5[0],
+      setWhiteTimeBuffer = _useLocalState5[1];
 
-  var _useLocalState7 = (0, _backend.useLocalState)(context, 'blackTimeBuffer', 0),
-      blackTimeBuffer = _useLocalState7[0],
-      setBlackTimeBuffer = _useLocalState7[1];
+  var _useLocalState6 = (0, _backend.useLocalState)(context, 'blackTimeBuffer', 0),
+      blackTimeBuffer = _useLocalState6[0],
+      setBlackTimeBuffer = _useLocalState6[1];
 
   var showTime = function showTime(value) {
     return (0, _format.formatTime)(value * 10);
@@ -12588,35 +12524,68 @@ var TeamIcon = function TeamIcon(props, context) {
   return (0, _inferno.createComponentVNode)(2, _components.Stack, {
     "direction": 'column',
     children: (0, _inferno.createComponentVNode)(2, _components.Tooltip, {
-      "position": "bottom",
       "content": team === 'white' ? 'White' : 'Black',
       children: (0, _inferno.createComponentVNode)(2, _components.Icon, {
         "className": "gameclock__teamicon",
-        "name": "circle" + (team === 'white' ? '-o' : '')
+        "name": "circle" + (team === 'white' ? '' : '-o')
+      })
+    })
+  });
+};
+
+var SidePart = function SidePart(props, context) {
+  var _useBackend4 = (0, _backend.useBackend)(context),
+      data = _useBackend4.data,
+      act = _useBackend4.act;
+
+  var team = props.team;
+
+  var showTime = function showTime(value) {
+    return (0, _format.formatTime)(value * 10);
+  };
+
+  return (0, _inferno.createComponentVNode)(2, _components.Stack, {
+    "direction": 'column',
+    "fill": true,
+    "className": "gameclock__sidepart",
+    children: (0, _inferno.createComponentVNode)(2, _components.Button, {
+      "color": "orange",
+      "disabled": !data.timing || (data.turn ? team === 'black' : team === 'white'),
+      "className": "gameclock__timebutton",
+      "onClick": function () {
+        function onClick() {
+          return act('end_turn');
+        }
+
+        return onClick;
+      }(),
+      children: (0, _inferno.createComponentVNode)(2, _components.Stack, {
+        "className": "gameclock__timeflex",
+        children: (0, _inferno.createComponentVNode)(2, _components.AnimatedNumber, {
+          "value": team === 'white' ? data.whiteTime : data.blackTime,
+          "format": showTime
+        })
       })
     })
   });
 };
 
 var MidPart = function MidPart(_, context) {
-  var _useBackend4 = (0, _backend.useBackend)(context),
-      data = _useBackend4.data,
-      act = _useBackend4.act;
+  var _useBackend5 = (0, _backend.useBackend)(context),
+      data = _useBackend5.data,
+      act = _useBackend5.act;
 
-  var _useLocalState8 = (0, _backend.useLocalState)(context, 'configModalOpen', false),
-      setConfigModalOpen = _useLocalState8[1];
+  var _useLocalState7 = (0, _backend.useLocalState)(context, 'configModalOpen', false),
+      setConfigModalOpen = _useLocalState7[1];
 
-  var _useLocalState9 = (0, _backend.useLocalState)(context, 'turnBuffer', true),
-      setTurnBuffer = _useLocalState9[1];
+  var _useLocalState8 = (0, _backend.useLocalState)(context, 'whiteTimeBuffer', 0),
+      setWhiteTimeBuffer = _useLocalState8[1];
 
-  var _useLocalState10 = (0, _backend.useLocalState)(context, 'whiteTimeBuffer', 0),
-      setWhiteTimeBuffer = _useLocalState10[1];
-
-  var _useLocalState11 = (0, _backend.useLocalState)(context, 'blackTimeBuffer', 0),
-      setBlackTimeBuffer = _useLocalState11[1];
+  var _useLocalState9 = (0, _backend.useLocalState)(context, 'blackTimeBuffer', 0),
+      setBlackTimeBuffer = _useLocalState9[1];
 
   return (0, _inferno.createComponentVNode)(2, _components.Stack, {
-    "direction": 'column',
+    "direction": 'row',
     "className": "gameclock__mid",
     children: [(0, _inferno.createComponentVNode)(2, _components.Box, {
       children: (0, _inferno.createComponentVNode)(2, _components.Button, {
@@ -12628,9 +12597,24 @@ var MidPart = function MidPart(_, context) {
         "onClick": function () {
           function onClick() {
             setConfigModalOpen(true);
-            setTurnBuffer(data.turn);
             setWhiteTimeBuffer(data.whiteTime);
             setBlackTimeBuffer(data.blackTime);
+          }
+
+          return onClick;
+        }()
+      })
+    }), (0, _inferno.createComponentVNode)(2, _components.Box, {
+      children: (0, _inferno.createComponentVNode)(2, _components.Button, {
+        "className": "gameclock__utilbutton",
+        "disabled": data.timing,
+        "tooltip": "Current Turn: " + (data.turn ? "White" : "Black"),
+        "tooltipPosition": "top",
+        "icon": "flag",
+        "color": data.turn ? "white" : "black",
+        "onClick": function () {
+          function onClick() {
+            return act('set_turn');
           }
 
           return onClick;
@@ -12668,43 +12652,6 @@ var MidPart = function MidPart(_, context) {
         }()
       })
     })]
-  });
-};
-
-var SidePart = function SidePart(props, context) {
-  var _useBackend5 = (0, _backend.useBackend)(context),
-      data = _useBackend5.data,
-      act = _useBackend5.act;
-
-  var team = props.team;
-
-  var showTime = function showTime(value) {
-    return (0, _format.formatTime)(value * 10);
-  };
-
-  return (0, _inferno.createComponentVNode)(2, _components.Stack, {
-    "direction": 'column',
-    "fill": true,
-    "className": "gameclock__sidepart",
-    children: (0, _inferno.createComponentVNode)(2, _components.Button, {
-      "color": "orange",
-      "disabled": !data.timing || (data.turn ? team === 'black' : team === 'white'),
-      "className": "gameclock__timebutton",
-      "onClick": function () {
-        function onClick() {
-          return act('end_turn');
-        }
-
-        return onClick;
-      }(),
-      children: (0, _inferno.createComponentVNode)(2, _components.Stack, {
-        "className": "gameclock__timeflex",
-        children: (0, _inferno.createComponentVNode)(2, _components.AnimatedNumber, {
-          "value": team === 'white' ? data.whiteTime : data.blackTime,
-          "format": showTime
-        })
-      })
-    })
   });
 };
 
@@ -27429,7 +27376,7 @@ exports.sanitizeText = sanitizeText;
 
 // extracted by mini-css-extract-plugin
     if(true) {
-      // 1668043870176
+      // 1668134241955
       var cssReload = __webpack_require__(/*! ./.yarn/$$virtual/mini-css-extract-plugin-virtual-3129e88c60/0/cache/mini-css-extract-plugin-npm-1.5.0-2fc744c5c1-b666770b3b.zip/node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js */ "./.yarn/$$virtual/mini-css-extract-plugin-virtual-3129e88c60/0/cache/mini-css-extract-plugin-npm-1.5.0-2fc744c5c1-b666770b3b.zip/node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js")(module.id, {"esModule":false,"locals":false});
       module.hot.dispose(cssReload);
       module.hot.accept(undefined, cssReload);
@@ -27446,7 +27393,7 @@ exports.sanitizeText = sanitizeText;
 
 // extracted by mini-css-extract-plugin
     if(true) {
-      // 1668043706329
+      // 1668134241948
       var cssReload = __webpack_require__(/*! ./.yarn/$$virtual/mini-css-extract-plugin-virtual-3129e88c60/0/cache/mini-css-extract-plugin-npm-1.5.0-2fc744c5c1-b666770b3b.zip/node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js */ "./.yarn/$$virtual/mini-css-extract-plugin-virtual-3129e88c60/0/cache/mini-css-extract-plugin-npm-1.5.0-2fc744c5c1-b666770b3b.zip/node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js")(module.id, {"esModule":false,"locals":false});
       module.hot.dispose(cssReload);
       module.hot.accept(undefined, cssReload);
@@ -27463,7 +27410,7 @@ exports.sanitizeText = sanitizeText;
 
 // extracted by mini-css-extract-plugin
     if(true) {
-      // 1668043706356
+      // 1668134241963
       var cssReload = __webpack_require__(/*! ./.yarn/$$virtual/mini-css-extract-plugin-virtual-3129e88c60/0/cache/mini-css-extract-plugin-npm-1.5.0-2fc744c5c1-b666770b3b.zip/node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js */ "./.yarn/$$virtual/mini-css-extract-plugin-virtual-3129e88c60/0/cache/mini-css-extract-plugin-npm-1.5.0-2fc744c5c1-b666770b3b.zip/node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js")(module.id, {"esModule":false,"locals":false});
       module.hot.dispose(cssReload);
       module.hot.accept(undefined, cssReload);
@@ -27480,7 +27427,7 @@ exports.sanitizeText = sanitizeText;
 
 // extracted by mini-css-extract-plugin
     if(true) {
-      // 1668043706353
+      // 1668134241960
       var cssReload = __webpack_require__(/*! ./.yarn/$$virtual/mini-css-extract-plugin-virtual-3129e88c60/0/cache/mini-css-extract-plugin-npm-1.5.0-2fc744c5c1-b666770b3b.zip/node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js */ "./.yarn/$$virtual/mini-css-extract-plugin-virtual-3129e88c60/0/cache/mini-css-extract-plugin-npm-1.5.0-2fc744c5c1-b666770b3b.zip/node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js")(module.id, {"esModule":false,"locals":false});
       module.hot.dispose(cssReload);
       module.hot.accept(undefined, cssReload);
@@ -27497,7 +27444,7 @@ exports.sanitizeText = sanitizeText;
 
 // extracted by mini-css-extract-plugin
     if(true) {
-      // 1668043706319
+      // 1668134241934
       var cssReload = __webpack_require__(/*! ./.yarn/$$virtual/mini-css-extract-plugin-virtual-3129e88c60/0/cache/mini-css-extract-plugin-npm-1.5.0-2fc744c5c1-b666770b3b.zip/node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js */ "./.yarn/$$virtual/mini-css-extract-plugin-virtual-3129e88c60/0/cache/mini-css-extract-plugin-npm-1.5.0-2fc744c5c1-b666770b3b.zip/node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js")(module.id, {"esModule":false,"locals":false});
       module.hot.dispose(cssReload);
       module.hot.accept(undefined, cssReload);
@@ -27514,7 +27461,7 @@ exports.sanitizeText = sanitizeText;
 
 // extracted by mini-css-extract-plugin
     if(true) {
-      // 1668043706324
+      // 1668134241944
       var cssReload = __webpack_require__(/*! ./.yarn/$$virtual/mini-css-extract-plugin-virtual-3129e88c60/0/cache/mini-css-extract-plugin-npm-1.5.0-2fc744c5c1-b666770b3b.zip/node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js */ "./.yarn/$$virtual/mini-css-extract-plugin-virtual-3129e88c60/0/cache/mini-css-extract-plugin-npm-1.5.0-2fc744c5c1-b666770b3b.zip/node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js")(module.id, {"esModule":false,"locals":false});
       module.hot.dispose(cssReload);
       module.hot.accept(undefined, cssReload);
@@ -27531,7 +27478,7 @@ exports.sanitizeText = sanitizeText;
 
 // extracted by mini-css-extract-plugin
     if(true) {
-      // 1668043706327
+      // 1668134241946
       var cssReload = __webpack_require__(/*! ./.yarn/$$virtual/mini-css-extract-plugin-virtual-3129e88c60/0/cache/mini-css-extract-plugin-npm-1.5.0-2fc744c5c1-b666770b3b.zip/node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js */ "./.yarn/$$virtual/mini-css-extract-plugin-virtual-3129e88c60/0/cache/mini-css-extract-plugin-npm-1.5.0-2fc744c5c1-b666770b3b.zip/node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js")(module.id, {"esModule":false,"locals":false});
       module.hot.dispose(cssReload);
       module.hot.accept(undefined, cssReload);
@@ -27548,7 +27495,7 @@ exports.sanitizeText = sanitizeText;
 
 // extracted by mini-css-extract-plugin
     if(true) {
-      // 1668043706358
+      // 1668134241966
       var cssReload = __webpack_require__(/*! ./.yarn/$$virtual/mini-css-extract-plugin-virtual-3129e88c60/0/cache/mini-css-extract-plugin-npm-1.5.0-2fc744c5c1-b666770b3b.zip/node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js */ "./.yarn/$$virtual/mini-css-extract-plugin-virtual-3129e88c60/0/cache/mini-css-extract-plugin-npm-1.5.0-2fc744c5c1-b666770b3b.zip/node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js")(module.id, {"esModule":false,"locals":false});
       module.hot.dispose(cssReload);
       module.hot.accept(undefined, cssReload);
@@ -28038,7 +27985,7 @@ webpackContext.id = "./packages/tgui/interfaces sync recursive ^\\.\\/.*$";
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	!function() {
-/******/ 		__webpack_require__.h = function() { return "1485e840951ec5ed0ea9"; }
+/******/ 		__webpack_require__.h = function() { return "2525feb7adbcc472a4c1"; }
 /******/ 	}();
 /******/ 	
 /******/ 	/* webpack/runtime/global */
