@@ -4681,7 +4681,6 @@ td, th {
  * SPDX-License-Identifier: MIT
  */
 .boardgame__window {
-  height: 100%;
   display: flex;
   flex-direction: column;
 }
@@ -4734,6 +4733,9 @@ td, th {
   background-color: #252525;
   padding: 10px;
   border-radius: 5px;
+  overflow-y: hidden;
+  height: 100%;
+  padding-bottom: 15%;
 }
 
 .boardgame__modal-tab {
@@ -4752,6 +4754,7 @@ td, th {
 
 .boardgame__modal-config {
   flex: 1;
+  max-height: 100%;
   overflow-y: auto;
 }
 
@@ -4932,9 +4935,8 @@ td, th {
 
 .boardgame__piece-set-wrapper {
   width: 100px;
+  max-height: 100%;
   overflow-y: scroll;
-  display: flex;
-  flex-direction: column;
 }
 
 .boardgame__piece-set-container {
@@ -4980,8 +4982,10 @@ td, th {
   display: flex;
   justify-content: space-around;
   flex-direction: row;
+  padding-top: 2px;
   padding-left: 20px;
   padding-right: 20px;
+  height: 20px;
   overflow: hidden;
 }
 
@@ -6013,6 +6017,22 @@ td, th {
   text-align: center;
 }
 
+.gameclock__timebutton > i {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.gameclock__timeflex {
+  flex-direction: column;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  font-size: 2em;
+}
+
 .gameclock__mid {
   padding: 5px;
   display: flex;
@@ -6034,28 +6054,6 @@ td, th {
   justify-content: center;
   align-items: center;
   height: 100%;
-}
-
-.gameclock__timeflex {
-  flex-direction: column;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-  font-size: 2em;
-}
-
-.gameclock__timebutton > i {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-}
-
-.gameclock__utilbutton > i {
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 .gas-canister-detonator-utility__list-item {

@@ -2282,7 +2282,7 @@ var FenCodeSettings = function FenCodeSettings(_props, context) {
       configModalOpen = _useLocalState2[0],
       setConfigModalOpen = _useLocalState2[1];
 
-  return configModalOpen && (0, _inferno.createComponentVNode)(2, _components.Box, {
+  return configModalOpen ? (0, _inferno.createComponentVNode)(2, _components.Box, {
     "className": "boardgame__modal",
     children: (0, _inferno.createComponentVNode)(2, _components.Box, {
       "className": "boardgame__modal-inner",
@@ -2326,7 +2326,7 @@ var FenCodeSettings = function FenCodeSettings(_props, context) {
         children: [tabIndex === 1 && (0, _inferno.createComponentVNode)(2, ConfigTab), tabIndex === 2 && (0, _inferno.createComponentVNode)(2, PresetsTab)]
       })]
     })
-  });
+  }) : null;
 };
 
 exports.FenCodeSettings = FenCodeSettings;
@@ -2452,11 +2452,8 @@ var ConfigTab = function ConfigTab(_props, context) {
         "text": "FEN",
         "tooltip": "Forsyth–Edwards Notation"
       }), (0, _inferno.createComponentVNode)(2, ConfigTooltip, {
-        "text": "PGN",
-        "tooltip": "Portable Game Notation (coming later)"
-      }), (0, _inferno.createComponentVNode)(2, ConfigTooltip, {
         "text": "PDN",
-        "tooltip": "Portable Draughts Notation (coming later)"
+        "tooltip": "Portable Draughts Notation"
       })]
     }), (0, _inferno.createComponentVNode)(2, _components.TextArea, {
       "value": gnot,
@@ -2506,7 +2503,7 @@ var PieceSVGImage = function PieceSVGImage(_ref2) {
     return (0, _inferno.createVNode)(32, "text", null, [pieceData.fenCode, (0, _inferno.createTextVNode)(" ")], 0);
   }
 
-  return;
+  return null;
 };
 
 // Create an svg element with the boardgame specified in the boardInfo
@@ -2604,7 +2601,7 @@ var PresetDetails = function PresetDetails(_props, context) {
       configModalOpen = _useLocalState7[0],
       setConfigModalOpen = _useLocalState7[1];
 
-  if (!selectedPreset) return;
+  if (!selectedPreset) return null;
   var setupString = '';
 
   if (selectedPreset) {
@@ -2649,15 +2646,15 @@ var PresetDetails = function PresetDetails(_props, context) {
           })]
         })]
       })]
-    }), (0, _inferno.createComponentVNode)(2, DetailRules, {
-      "element": selectedPreset == null ? void 0 : selectedPreset.rules
-    })]
+    }), selectedPreset.rules ? (0, _inferno.createComponentVNode)(2, DetailRules, {
+      "element": selectedPreset.rules
+    }) : null]
   });
 };
 
 var DetailRules = function DetailRules(_ref4) {
   var element = _ref4.element;
-  if (!element) return;
+  if (!element) return null;
   return (0, _inferno.createComponentVNode)(2, _components.Box, {
     "className": "boardgame__rules",
     children: [(0, _inferno.createVNode)(1, "h4", null, "Rules", 16), (0, _inferno.createComponentVNode)(2, _components.Box, {
@@ -2679,32 +2676,6 @@ var PresetsTab = function PresetsTab(_props, context) {
       }, i);
     }), (0, _inferno.createComponentVNode)(2, PresetDetails)]
   });
-  /* <Flex className="boardgame__presets">
-      {presets.map((preset, i) => {
-        const setup = preset.setup;
-        // if setup is a function, call it to get the setup
-        const setupString = typeof setup === 'function' ? setup() : setup;
-         return (
-          <Flex.Item
-            key={i}
-            className="boardgame__preset"
-            onClick={() => {
-              act('applyGNot', {
-                gnot: setupString,
-              });
-              setConfigModalOpen(false);
-            }}>
-            <Tooltip position="top" content={preset.name}>
-              <Flex position="relative">
-                <Flex.Item>
-                  <PresetItem presetSetup={setupString} />
-                </Flex.Item>
-              </Flex>
-            </Tooltip>
-          </Flex.Item>
-        );
-      })}
-    </Flex>*/
 };
 
 var PresetsRow = function PresetsRow(_ref5, context) {
@@ -2855,6 +2826,8 @@ var HeldPieceRenderer = function HeldPieceRenderer(_, context) {
         "src": piece == null ? void 0 : piece.image
       }), (0, _inferno.createVNode)(1, "span", null, piece == null ? void 0 : piece.name, 0)]
     });
+  } else {
+    return null;
   }
 };
 
@@ -2892,6 +2865,7 @@ var Notations = function Notations(_ref, context) {
   var boardInfo = data.boardInfo;
   var height = boardInfo.height,
       width = boardInfo.width;
+  var currentUser = data.currentUser;
   var _data$styling = data.styling,
       tileColour1 = _data$styling.tileColour1,
       tileColour2 = _data$styling.tileColour2,
@@ -2919,6 +2893,21 @@ var Notations = function Notations(_ref, context) {
   }
 
   return (0, _inferno.createComponentVNode)(2, _components.Flex.Item, {
+    "onMouseUp": function () {
+      function onMouseUp() {
+        act('paletteClear', {
+          ckey: currentUser.ckey
+        });
+
+        if (currentUser.selected) {
+          act('pawnRemove', {
+            id: currentUser.selected
+          });
+        }
+      }
+
+      return onMouseUp;
+    }(),
     "style": {
       'background-color': border || tileColour2,
       'color': tileColour1
@@ -3065,6 +3054,12 @@ var PieceDrawer = function PieceDrawer(orps, context) {
         act('paletteClear', {
           ckey: currentUser.ckey
         });
+
+        if (currentUser.selected) {
+          act('pawnRemove', {
+            id: currentUser.selected
+          });
+        }
       }
 
       return onMouseUp;
@@ -3329,8 +3324,9 @@ var Pattern = function Pattern(_ref2, context) {
           width: tileWidth,
           height: tileHeight
         });
+        var x = flip ? data.boardInfo.width - boardX - 1 : boardX;
         setTranslateCoords({
-          x: boardX,
+          x: x,
           y: boardY
         });
       }
@@ -3347,9 +3343,10 @@ var Pattern = function Pattern(_ref2, context) {
         // Convert the mouse coords to board coords
         // If the board is 8 tiles wide, and the mouse is at 50% of the board width, the board coord is 4
         // Use x,y, boardWidth, boardHeight, tileWidth, tileHeight only, boardRect.x and boardRect.y are not needed
+        var x = flip ? data.boardInfo.width - boardX - 1 : boardX;
         act('pawnPlace', {
           ckey: currentUser.ckey,
-          x: boardX,
+          x: x,
           y: boardY
         });
       }
@@ -3753,6 +3750,9 @@ var _inferno = __webpack_require__(/*! inferno */ "./.yarn/cache/inferno-npm-7.4
 
 var _components = __webpack_require__(/*! ../../../components */ "./packages/tgui/components/index.js");
 
+/* eslint-disable react/no-unescaped-entities */
+
+/* @ts-ignore */
 var presets = [];
 /* Chess */
 
@@ -3776,7 +3776,7 @@ presets.push({
         "bold": true,
         children: "Objective"
       }), (0, _inferno.createComponentVNode)(2, _components.Box, {
-        children: "Checkmate the opponent's king."
+        children: "Checkmate the opponents king."
       })]
     }), (0, _inferno.createComponentVNode)(2, _components.Stack.Item, {
       children: [(0, _inferno.createComponentVNode)(2, _components.Box, {
@@ -3790,7 +3790,7 @@ presets.push({
         "bold": true,
         children: "Gameplay"
       }), (0, _inferno.createComponentVNode)(2, _components.Box, {
-        children: "Players take turns moving one of their pieces. A move is legal if it does not put the player's king in check. A player can only move a piece if it is their turn. A player can only move a piece if it is their turn. If a player's king is in check, they must move it out of check. If a player's king is in checkmate, they lose. If a player's king is in stalemate, the game is a draw."
+        children: "Players take turns moving one of their pieces. A move is legal if it does not put the players king in check. A player can only move a piece if it is their turn. A player can only move a piece if it is their turn. If a players king is in check, they must move it out of check. If a players king is in checkmate, they lose. If a players king is in stalemate, the game is a draw."
       })]
     })]
   }),
@@ -3809,7 +3809,7 @@ presets.push({
         "bold": true,
         children: "Objective"
       }), (0, _inferno.createComponentVNode)(2, _components.Box, {
-        children: "Checkmate the opponent's king."
+        children: "Checkmate the opponents king."
       })]
     }), (0, _inferno.createComponentVNode)(2, _components.Stack.Item, {
       children: [(0, _inferno.createComponentVNode)(2, _components.Box, {
@@ -4037,6 +4037,7 @@ var Boardgame = function Boardgame(_props, context) {
   var useNotations = data.styling.useNotations;
 
   var _useLocalState = (0, _backend.useLocalState)(context, 'configModalOpen', false),
+      configModalOpen = _useLocalState[0],
       setConfigModalOpen = _useLocalState[1];
 
   var _useLocalState2 = (0, _backend.useLocalState)(context, 'flip', false),
@@ -4051,8 +4052,8 @@ var Boardgame = function Boardgame(_props, context) {
 
   return (0, _inferno.createComponentVNode)(2, _layouts.Window, {
     "title": name,
-    "width": 800,
-    "height": 650,
+    "width": 500,
+    "height": 400,
     children: [(0, _inferno.createComponentVNode)(2, _Components.FenCodeSettings), (0, _inferno.createComponentVNode)(2, _layouts.Window.Content, {
       "onMouseMove": function () {
         function onMouseMove(e) {
@@ -4142,8 +4143,8 @@ Boardgame.defaultHooks = {
       var pieceSetPadding = 100; // Add 100 pixels to the width
 
       var titlebarHeightPadding = 32;
-      var width = 600;
-      var height = 500; // Fetch boardgame__wrapper element and get its width and height
+      var width = 500;
+      var height = 400; // Fetch boardgame__wrapper element and get its width and height
 
       var wrapper = document.getElementsByClassName('boardgame__wrapper')[0];
 
@@ -26962,7 +26963,7 @@ exports.sanitizeText = sanitizeText;
 
 // extracted by mini-css-extract-plugin
     if(true) {
-      // 1668751460571
+      // 1668825056932
       var cssReload = __webpack_require__(/*! ./.yarn/$$virtual/mini-css-extract-plugin-virtual-3129e88c60/0/cache/mini-css-extract-plugin-npm-1.5.0-2fc744c5c1-b666770b3b.zip/node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js */ "./.yarn/$$virtual/mini-css-extract-plugin-virtual-3129e88c60/0/cache/mini-css-extract-plugin-npm-1.5.0-2fc744c5c1-b666770b3b.zip/node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js")(module.id, {"esModule":false,"locals":false});
       module.hot.dispose(cssReload);
       module.hot.accept(undefined, cssReload);
@@ -26979,7 +26980,7 @@ exports.sanitizeText = sanitizeText;
 
 // extracted by mini-css-extract-plugin
     if(true) {
-      // 1668751460547
+      // 1668821518009
       var cssReload = __webpack_require__(/*! ./.yarn/$$virtual/mini-css-extract-plugin-virtual-3129e88c60/0/cache/mini-css-extract-plugin-npm-1.5.0-2fc744c5c1-b666770b3b.zip/node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js */ "./.yarn/$$virtual/mini-css-extract-plugin-virtual-3129e88c60/0/cache/mini-css-extract-plugin-npm-1.5.0-2fc744c5c1-b666770b3b.zip/node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js")(module.id, {"esModule":false,"locals":false});
       module.hot.dispose(cssReload);
       module.hot.accept(undefined, cssReload);
@@ -26996,7 +26997,7 @@ exports.sanitizeText = sanitizeText;
 
 // extracted by mini-css-extract-plugin
     if(true) {
-      // 1668751460576
+      // 1668821518044
       var cssReload = __webpack_require__(/*! ./.yarn/$$virtual/mini-css-extract-plugin-virtual-3129e88c60/0/cache/mini-css-extract-plugin-npm-1.5.0-2fc744c5c1-b666770b3b.zip/node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js */ "./.yarn/$$virtual/mini-css-extract-plugin-virtual-3129e88c60/0/cache/mini-css-extract-plugin-npm-1.5.0-2fc744c5c1-b666770b3b.zip/node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js")(module.id, {"esModule":false,"locals":false});
       module.hot.dispose(cssReload);
       module.hot.accept(undefined, cssReload);
@@ -27013,7 +27014,7 @@ exports.sanitizeText = sanitizeText;
 
 // extracted by mini-css-extract-plugin
     if(true) {
-      // 1668751460574
+      // 1668821518042
       var cssReload = __webpack_require__(/*! ./.yarn/$$virtual/mini-css-extract-plugin-virtual-3129e88c60/0/cache/mini-css-extract-plugin-npm-1.5.0-2fc744c5c1-b666770b3b.zip/node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js */ "./.yarn/$$virtual/mini-css-extract-plugin-virtual-3129e88c60/0/cache/mini-css-extract-plugin-npm-1.5.0-2fc744c5c1-b666770b3b.zip/node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js")(module.id, {"esModule":false,"locals":false});
       module.hot.dispose(cssReload);
       module.hot.accept(undefined, cssReload);
@@ -27030,7 +27031,7 @@ exports.sanitizeText = sanitizeText;
 
 // extracted by mini-css-extract-plugin
     if(true) {
-      // 1668751460524
+      // 1668821517996
       var cssReload = __webpack_require__(/*! ./.yarn/$$virtual/mini-css-extract-plugin-virtual-3129e88c60/0/cache/mini-css-extract-plugin-npm-1.5.0-2fc744c5c1-b666770b3b.zip/node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js */ "./.yarn/$$virtual/mini-css-extract-plugin-virtual-3129e88c60/0/cache/mini-css-extract-plugin-npm-1.5.0-2fc744c5c1-b666770b3b.zip/node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js")(module.id, {"esModule":false,"locals":false});
       module.hot.dispose(cssReload);
       module.hot.accept(undefined, cssReload);
@@ -27047,7 +27048,7 @@ exports.sanitizeText = sanitizeText;
 
 // extracted by mini-css-extract-plugin
     if(true) {
-      // 1668751460538
+      // 1668821518003
       var cssReload = __webpack_require__(/*! ./.yarn/$$virtual/mini-css-extract-plugin-virtual-3129e88c60/0/cache/mini-css-extract-plugin-npm-1.5.0-2fc744c5c1-b666770b3b.zip/node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js */ "./.yarn/$$virtual/mini-css-extract-plugin-virtual-3129e88c60/0/cache/mini-css-extract-plugin-npm-1.5.0-2fc744c5c1-b666770b3b.zip/node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js")(module.id, {"esModule":false,"locals":false});
       module.hot.dispose(cssReload);
       module.hot.accept(undefined, cssReload);
@@ -27064,7 +27065,7 @@ exports.sanitizeText = sanitizeText;
 
 // extracted by mini-css-extract-plugin
     if(true) {
-      // 1668751460543
+      // 1668821518007
       var cssReload = __webpack_require__(/*! ./.yarn/$$virtual/mini-css-extract-plugin-virtual-3129e88c60/0/cache/mini-css-extract-plugin-npm-1.5.0-2fc744c5c1-b666770b3b.zip/node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js */ "./.yarn/$$virtual/mini-css-extract-plugin-virtual-3129e88c60/0/cache/mini-css-extract-plugin-npm-1.5.0-2fc744c5c1-b666770b3b.zip/node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js")(module.id, {"esModule":false,"locals":false});
       module.hot.dispose(cssReload);
       module.hot.accept(undefined, cssReload);
@@ -27081,7 +27082,7 @@ exports.sanitizeText = sanitizeText;
 
 // extracted by mini-css-extract-plugin
     if(true) {
-      // 1668751460581
+      // 1668821518046
       var cssReload = __webpack_require__(/*! ./.yarn/$$virtual/mini-css-extract-plugin-virtual-3129e88c60/0/cache/mini-css-extract-plugin-npm-1.5.0-2fc744c5c1-b666770b3b.zip/node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js */ "./.yarn/$$virtual/mini-css-extract-plugin-virtual-3129e88c60/0/cache/mini-css-extract-plugin-npm-1.5.0-2fc744c5c1-b666770b3b.zip/node_modules/mini-css-extract-plugin/dist/hmr/hotModuleReplacement.js")(module.id, {"esModule":false,"locals":false});
       module.hot.dispose(cssReload);
       module.hot.accept(undefined, cssReload);
@@ -27553,7 +27554,7 @@ webpackContext.id = "./packages/tgui/interfaces sync recursive ^\\.\\/.*$";
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	!function() {
-/******/ 		__webpack_require__.h = function() { return "0bcdd7abcaf1155293f2"; }
+/******/ 		__webpack_require__.h = function() { return "05c23f1c0105b0edaaba"; }
 /******/ 	}();
 /******/ 	
 /******/ 	/* webpack/runtime/global */
