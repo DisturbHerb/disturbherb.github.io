@@ -143,6 +143,10 @@ td, th {
   color: #848484 !important;
 }
 
+.color-light-grey {
+  color: #b3b3b3 !important;
+}
+
 .color-good {
   color: #68c22d !important;
 }
@@ -213,6 +217,10 @@ td, th {
 
 .color-bg-grey {
   background-color: #646464 !important;
+}
+
+.color-bg-light-grey {
+  background-color: #919191 !important;
 }
 
 .color-bg-good {
@@ -345,6 +353,10 @@ td, th {
   outline: 0.167rem solid #848484 !important;
 }
 
+.outline-color-light-grey {
+  outline: 0.167rem solid #b3b3b3 !important;
+}
+
 .outline-color-good {
   outline: 0.167rem solid #68c22d !important;
 }
@@ -443,6 +455,7 @@ td, th {
 /**
  * Copyright (c) 2020 Aleksej Komarov
  * SPDX-License-Identifier: MIT
+ * Changes: ZeWaka (FA6)
  */
 .Button {
   position: relative;
@@ -464,7 +477,7 @@ td, th {
 }
 
 .Button .fa, .Button .fa-solid, .Button .fa-regular {
-  margin-left: -0.25em;
+  margin-left: 0em;
   margin-right: -0.25em;
   min-width: 1.333em;
   text-align: center;
@@ -472,6 +485,11 @@ td, th {
 
 .Button--hasContent .fa, .Button--hasContent .fa-solid, .Button--hasContent .fa-regular {
   margin-right: 0.25em;
+}
+
+.Button--hasContent.Button--iconPosition--right .fa, .Button--hasContent.Button--iconPosition--right .fas, .Button--hasContent.Button--iconPosition--right .far {
+  margin-right: 0px;
+  margin-left: 3px;
 }
 
 .Button--ellipsis {
@@ -816,6 +834,29 @@ td, th {
   background-color: #a8a8a8;
 }
 
+.Button--color--light-grey {
+  transition: color 50ms, background-color 50ms;
+  background-color: #919191;
+  color: white;
+}
+
+.Button--color--light-grey:hover {
+  transition: color 0ms, background-color 0ms;
+}
+
+.Button--color--light-grey:focus {
+  transition: color 100ms, background-color 100ms;
+}
+
+.Button--color--light-grey:hover, .Button--color--light-grey:focus {
+  background-color: #bababa;
+  color: white;
+}
+
+.Button--color--light-grey:active {
+  background-color: #e2e2e2;
+}
+
 .Button--color--good {
   transition: color 50ms, background-color 50ms;
   background-color: #4d9121;
@@ -1029,6 +1070,32 @@ td, th {
   background-color: #59da78;
 }
 
+.Button--flex {
+  display: inline-flex;
+  flex-direction: column;
+}
+
+.Button--flex--fluid {
+  width: 100%;
+}
+
+.Button--verticalAlignContent--top {
+  justify-content: flex-start;
+}
+
+.Button--verticalAlignContent--middle {
+  justify-content: center;
+}
+
+.Button--verticalAlignContent--bottom {
+  justify-content: flex-end;
+}
+
+.Button__content {
+  display: block;
+  align-self: stretch;
+}
+
 /**
  * Copyright (c) 2020 Aleksej Komarov
  * SPDX-License-Identifier: MIT
@@ -1165,7 +1232,6 @@ td, th {
 .Dropdown__selected-text {
   display: inline-block;
   text-overflow: ellipsis;
-  overflow: hidden;
   white-space: nowrap;
   height: 1.4166666667em;
   width: calc(100% - 1.2em);
@@ -1185,42 +1251,19 @@ td, th {
 }
 
 .Flex--iefix {
-  display: table !important;
-  width: 105%;
-  border-collapse: collapse;
-  border-spacing: 0;
+  display: block;
 }
 
-.Flex--iefix:after {
-  content: "";
-  display: table-cell;
-  width: 5%;
-}
-
-.Flex--iefix--column {
-  display: table !important;
-  width: 100% !important;
-  height: 100% !important;
-  border-collapse: collapse;
-  border-spacing: 0;
-}
-
-.Flex--iefix--column > .Flex__item--iefix {
-  display: table-row !important;
-}
-
-.Flex--iefix--column > .Flex__item--iefix--grow {
-  height: 100% !important;
+.Flex--iefix.Flex--inline {
+  display: inline-block;
 }
 
 .Flex__item--iefix {
-  display: table-cell !important;
-  width: 1% !important;
-  min-width: 99%;
+  display: inline-block;
 }
 
-.Flex__item--iefix--grow {
-  width: auto !important;
+.Flex--iefix--column > .Flex__item--iefix {
+  display: block;
 }
 
 /**
@@ -1460,6 +1503,10 @@ td, th {
   stroke: #848484;
 }
 
+.Knob--color--light-grey .Knob__ringFill {
+  stroke: #b3b3b3;
+}
+
 .Knob--color--good .Knob__ringFill {
   stroke: #68c22d;
 }
@@ -1509,10 +1556,9 @@ td, th {
   padding: 0.25em 0.5em;
   border: 0;
   text-align: left;
-  vertical-align: baseline;
 }
 
-.LabeledList__label {
+.LabeledList__label--nowrap {
   width: 1%;
   white-space: nowrap;
   min-width: 5em;
@@ -1635,6 +1681,11 @@ td, th {
 .NoticeBox--color--grey {
   color: white;
   background-color: #3e3e3e;
+}
+
+.NoticeBox--color--light-grey {
+  color: white;
+  background-color: #6a6a6a;
 }
 
 .NoticeBox--color--good {
@@ -1975,6 +2026,14 @@ td, th {
 
 .ProgressBar--color--grey .ProgressBar__fill {
   background-color: #646464;
+}
+
+.ProgressBar--color--light-grey {
+  border-color: #919191 !important;
+}
+
+.ProgressBar--color--light-grey .ProgressBar__fill {
+  background-color: #919191;
 }
 
 .ProgressBar--color--good {
@@ -2566,6 +2625,18 @@ td, th {
 
 .Tabs--vertical .Tab--selected.Tab--color--grey {
   border-right-color: #848484;
+}
+
+.Tab--selected.Tab--color--light-grey {
+  color: #c6c6c6;
+}
+
+.Tabs--horizontal .Tab--selected.Tab--color--light-grey {
+  border-bottom-color: #b3b3b3;
+}
+
+.Tabs--vertical .Tab--selected.Tab--color--light-grey {
+  border-right-color: #b3b3b3;
 }
 
 .Tab--selected.Tab--color--good {
@@ -3906,6 +3977,7 @@ em {
   /**
    * Copyright (c) 2020 Aleksej Komarov
    * SPDX-License-Identifier: MIT
+   * Changes: ZeWaka (FA6)
    */
   /**
    * Copyright (c) 2020 Aleksej Komarov
@@ -4079,6 +4151,9 @@ em {
 .theme-light .color-grey {
   color: #e6e6e6 !important;
 }
+.theme-light .color-light-grey {
+  color: #999999 !important;
+}
 .theme-light .color-good {
   color: #529923 !important;
 }
@@ -4132,6 +4207,9 @@ em {
 }
 .theme-light .color-bg-grey {
   background-color: #bfbfbf !important;
+}
+.theme-light .color-bg-light-grey {
+  background-color: gray !important;
 }
 .theme-light .color-bg-good {
   background-color: #44801d !important;
@@ -4355,6 +4433,15 @@ em {
 .theme-light .Tabs--vertical .Tab--selected.Tab--color--grey {
   border-right-color: #e6e6e6;
 }
+.theme-light .Tab--selected.Tab--color--light-grey {
+  color: #b3b3b3;
+}
+.theme-light .Tabs--horizontal .Tab--selected.Tab--color--light-grey {
+  border-bottom-color: #999999;
+}
+.theme-light .Tabs--vertical .Tab--selected.Tab--color--light-grey {
+  border-right-color: #999999;
+}
 .theme-light .Tab--selected.Tab--color--good {
   color: #77d23b;
 }
@@ -4495,13 +4582,17 @@ em {
   margin-bottom: 0;
 }
 .theme-light .Button .fa, .theme-light .Button .fa-solid, .theme-light .Button .fa-regular {
-  margin-left: -0.25em;
+  margin-left: 0em;
   margin-right: -0.25em;
   min-width: 1.333em;
   text-align: center;
 }
 .theme-light .Button--hasContent .fa, .theme-light .Button--hasContent .fa-solid, .theme-light .Button--hasContent .fa-regular {
   margin-right: 0.25em;
+}
+.theme-light .Button--hasContent.Button--iconPosition--right .fa, .theme-light .Button--hasContent.Button--iconPosition--right .fas, .theme-light .Button--hasContent.Button--iconPosition--right .far {
+  margin-right: 0px;
+  margin-left: 3px;
 }
 .theme-light .Button--ellipsis {
   overflow: hidden;
@@ -4771,6 +4862,24 @@ em {
 .theme-light .Button--color--grey:active {
   background-color: #f9f9f9;
 }
+.theme-light .Button--color--light-grey {
+  transition: color 50ms, background-color 50ms;
+  background-color: gray;
+  color: white;
+}
+.theme-light .Button--color--light-grey:hover {
+  transition: color 0ms, background-color 0ms;
+}
+.theme-light .Button--color--light-grey:focus {
+  transition: color 100ms, background-color 100ms;
+}
+.theme-light .Button--color--light-grey:hover, .theme-light .Button--color--light-grey:focus {
+  background-color: #a6a6a6;
+  color: white;
+}
+.theme-light .Button--color--light-grey:active {
+  background-color: #cccccc;
+}
 .theme-light .Button--color--good {
   transition: color 50ms, background-color 50ms;
   background-color: #44801d;
@@ -4937,6 +5046,26 @@ em {
 }
 .theme-light .Button--selected:active {
   background-color: #51aaf3;
+}
+.theme-light .Button--flex {
+  display: inline-flex;
+  flex-direction: column;
+}
+.theme-light .Button--flex--fluid {
+  width: 100%;
+}
+.theme-light .Button--verticalAlignContent--top {
+  justify-content: flex-start;
+}
+.theme-light .Button--verticalAlignContent--middle {
+  justify-content: center;
+}
+.theme-light .Button--verticalAlignContent--bottom {
+  justify-content: flex-end;
+}
+.theme-light .Button__content {
+  display: block;
+  align-self: stretch;
 }
 .theme-light .Input {
   position: relative;
@@ -5221,6 +5350,9 @@ em {
 .theme-light .Knob--color--grey .Knob__ringFill {
   stroke: #e6e6e6;
 }
+.theme-light .Knob--color--light-grey .Knob__ringFill {
+  stroke: #999999;
+}
 .theme-light .Knob--color--good .Knob__ringFill {
   stroke: #529923;
 }
@@ -5387,6 +5519,12 @@ em {
 }
 .theme-light .ProgressBar--color--grey .ProgressBar__fill {
   background-color: #bfbfbf;
+}
+.theme-light .ProgressBar--color--light-grey {
+  border-color: gray !important;
+}
+.theme-light .ProgressBar--color--light-grey .ProgressBar__fill {
+  background-color: gray;
 }
 .theme-light .ProgressBar--color--good {
   border-color: #44801d !important;

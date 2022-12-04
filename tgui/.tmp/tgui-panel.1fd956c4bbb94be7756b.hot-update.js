@@ -1,12 +1,11 @@
+"use strict";
 self["webpackHotUpdatetgui_workspace"]("tgui-panel",{},
 /******/ function(__webpack_require__) { // webpackRuntimeModules
-/******/ "use strict";
-/******/ 
 /******/ /* webpack/runtime/getFullHash */
 /******/ !function() {
-/******/ 	__webpack_require__.h = function() { return "05c23f1c0105b0edaaba"; }
+/******/ 	__webpack_require__.h = function() { return "e9b0625a03f522508725"; }
 /******/ }();
 /******/ 
 /******/ }
 );
-//# sourceMappingURL=tgui-panel.68afbc7f328de927c37e.hot-update.js.map
+//# sourceMappingURL=tgui-panel.1fd956c4bbb94be7756b.hot-update.js.map
