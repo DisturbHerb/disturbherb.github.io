@@ -27,10 +27,6 @@ draft = true
     assignment = "Nanotrasen Space Station 13 (SS13)"
     languages = "English"
 
-    examine = ""
-    securityNote = ""
-    medicalNote = ""
-
     [[externalLink]]
         name = "VGen"
         description = "External art portfolio"
