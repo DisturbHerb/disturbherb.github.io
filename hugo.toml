@@ -1,6 +1,8 @@
 baseURL = 'https://disturbherb.github.io/'
 languageCode = 'en-au'
 title = '''DisturbHerb's Box'''
+copyright = 'Copyright © 2026, DisturbHerb'
+theme = 'herbportfolio'
 
 [caches]
   [caches.images]
