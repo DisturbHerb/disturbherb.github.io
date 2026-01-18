@@ -1,0 +1,6 @@
+<footer>
+    {{ $lastModDate := time.AsTime .Page.Lastmod | time.Format `:date_long`}}
+    {{ $lastModTime := time.AsTime .Page.Lastmod | time.Format `:time_long`}}
+    <p><b>Last Modified:</b> {{ $lastModDate }} at {{ $lastModTime }}</p>
+    <p>{{ .Site.Copyright }}</p>
+</footer>

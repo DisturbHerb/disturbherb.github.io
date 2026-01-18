@@ -7,15 +7,7 @@
     <generator>Hugo</generator>
     <language>en-au</language>
     <copyright>Copyright © 2026, DisturbHerb</copyright>
-    <lastBuildDate>Sun, 18 Jan 2026 14:38:06 +1000</lastBuildDate>
     <atom:link href="http://localhost:1313/characters/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Rupert Wilde</title>
-      <link>http://localhost:1313/characters/rupert_wilde/</link>
-      <pubDate>Sun, 18 Jan 2026 13:46:27 +1000</pubDate>
-      <guid>http://localhost:1313/characters/rupert_wilde/</guid>
-      <description></description>
-    </item>
     <item>
       <title>Helga Schulz</title>
       <link>http://localhost:1313/characters/helga_schulz/</link>
@@ -29,6 +21,13 @@
       <pubDate>Sun, 18 Jan 2026 14:38:00 +1000</pubDate>
       <guid>http://localhost:1313/characters/jennifer_dodge/</guid>
       <description>&lt;p&gt;this is jennis home yaya&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Rupert Wilde</title>
+      <link>http://localhost:1313/characters/rupert_wilde/</link>
+      <pubDate>Sun, 18 Jan 2026 13:46:27 +1000</pubDate>
+      <guid>http://localhost:1313/characters/rupert_wilde/</guid>
+      <description>&lt;p&gt;&lt;strong&gt;TODO: Replace this aging lore!&lt;/strong&gt;&lt;/p&gt;&#xA;&lt;p&gt;Rupert Licky Wilde was born to Archibald Huxworth Wilde (58) and Belinda Aubrey Wilde (55) – both Australian citizens - on the 22nd of February 2028 in London, the United Kingdom. His family would include his two parents and two other siblings; the elder Renée Icky Wilde and the younger Robert Sticky Wilde. According to the family, the children’s middle names were the result of an intoxicant-fuelled bet which Archibald Wilde had lost years earlier. Their first names were, however, an attempt at humour by the elder Wilde; much to his children’s chagrin. They resided for two years within the Royal Borough of Kensington and Chelsea; part of Greater London.&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>

@@ -1,20 +1,10 @@
 <!DOCTYPE html>
 <html>
-  <head>
-      <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>{{with .Title}}{{ . }} | {{end}}{{ .Site.Title }}</title>
-  </head>
+  {{- partial "head.html" . -}}
   <body>
-      <nav>
-      <a href="/">Home</a>
-      <a href="/characters">Characters</a>
-      <a href="/tags">Tags</a>
-    </nav>
+    {{- partial "header.html" . -}}
     {{ block "main" . }}
     {{ end }}
   </body>
-  <footer>
-    <p>{{ .Site.Copyright }}</p>
-  </footer>
+  {{- partial "footer.html" . -}}
 </html>
