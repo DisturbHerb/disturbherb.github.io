@@ -6,7 +6,15 @@
       <title>{{with .Title}}{{ . }} | {{end}}{{ .Site.Title }}</title>
   </head>
   <body>
+      <nav>
+      <a href="/">Home</a>
+      <a href="/characters">Characters</a>
+      <a href="/tags">Tags</a>
+    </nav>
     {{ block "main" . }}
     {{ end }}
   </body>
+  <footer>
+    <p>{{ .Site.Copyright }}</p>
+  </footer>
 </html>
