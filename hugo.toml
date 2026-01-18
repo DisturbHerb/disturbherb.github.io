@@ -1,0 +1,7 @@
+baseURL = 'https://disturbherb.github.io/'
+languageCode = 'en-au'
+title = '''DisturbHerb's Box'''
+
+[caches]
+  [caches.images]
+    dir = ':cacheDir/images'
