@@ -1,5 +1,6 @@
 {{ define "main" }}
     <h2>{{ .Title }}</h2>
+    {{- partial "last_modified.html" . -}}
     <p>Issued: {{ with .Params.doi }}{{ time.AsTime . | time.Format `:date_long` }}{{ else }}Unknown{{ end }}</p>
     <h3>Biographical Data</h3>
     <ul>
