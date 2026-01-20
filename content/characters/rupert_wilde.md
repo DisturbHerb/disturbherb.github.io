@@ -32,7 +32,7 @@ date = "2026-01-18T13:46:27+10:00"
         link = "https://vsona.co/rupert-wilde"
 +++
 
-A Medical Doctor hailing from Sydney, Australia. Reserved, keeping his hand close to his chest outside of the company of his closest friends, though his service with Nanotrasen has helped him warm up to others. An idealist, fervently 
+A Medical Doctor hailing from Sydney, Australia. Reserved, keeping his hand close to his chest and slow to building new relationships. An idealist, fervently devoted to the welfare of others, even at great cost to himself. Prone to coming off curt in spite of -- or maybe resulting from -- his naive sincerity. Decisive where he needs to be, snap decisions begetting feverish action, where life and death hang in the balance. Almost always looks to be barely keeping pace with the challenges of his field, coming from the fire of a grueling residency into the frying pan of far-flung deployments among the stars. 
 
 After his older sister, with whom he was extremely close, abruptly left home and cut-off contact, his devastation fed into the self-confidence and isolation of his youth. Yet, a fire began to burn in his belly; a raging desire to step up to the role of the selfless protector he idolised her as. Throwing himself into his studies, he accepted Nanotrasen's patronage and entered its employ after years of grueling labour as a newly minted doctor.
 
